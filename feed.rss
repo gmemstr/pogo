@@ -4,7 +4,7 @@
     <link>https://gitgalaxy.com</link>
     <description>discussion about open source projects</description>
     <managingEditor>gabriel@gitgalaxy.com (Gabriel Simmer)</managingEditor>
-    <pubDate>Tue, 13 Jun 2017 22:52:48 -0700</pubDate>
+    <pubDate>Tue, 13 Jun 2017 23:03:07 -0700</pubDate>
     <image>
       <url>https://static.gitgalaxy.com/podcast_image.png</url>
       <title></title>
@@ -14,7 +14,7 @@
       <title>TESTING-WORLD</title>
       <link>https://gitgalaxy.com/podcast</link>
       <description>Hello, World!</description>
-      <author>Gabriel Simmer</author>
+      <enclosure url="https://podcast.gitgalaxy.com/download/2017-07-12_TESTING-WORLD.mp3" length="100" type="audio/mpeg"></enclosure>
       <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
     </item>
   </channel>

@@ -1,3 +1,7 @@
+# Custom ignores
+feed.rss
+podcasts/*
+
 # Binaries for programs and plugins
 *.exe
 *.dll
