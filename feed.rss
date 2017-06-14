@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0">
+  <channel>
+    <title>Git Galaxy Stargazers</title>
+    <link>https://gitgalaxy.com</link>
+    <description>discussion about open source projects</description>
+    <managingEditor>gabriel@gitgalaxy.com (Gabriel Simmer)</managingEditor>
+    <pubDate>Tue, 13 Jun 2017 22:52:48 -0700</pubDate>
+    <image>
+      <url>https://static.gitgalaxy.com/podcast_image.png</url>
+      <title></title>
+      <link></link>
+    </image>
+    <item>
+      <title>TESTING-WORLD</title>
+      <link>https://gitgalaxy.com/podcast</link>
+      <description>Hello, World!</description>
+      <author>Gabriel Simmer</author>
+      <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
