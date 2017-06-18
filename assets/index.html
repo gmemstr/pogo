@@ -2,11 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>White Rabbit Podcasting CMS</title>
+    <title>CMS Loading</title>
     <link rel="stylesheet" href="/assets/styles.css">
+
 </head>
 <body>
-    <h1>White Rabbit Podcasting CMS</h1>
-    <p>Git Galaxy Podcast</p>
+    <h1 id="title" class="title">Loading</h1>
+
+<div id="podcasts">
+
+</div>
+
+<script>
+get("/json", function(data){
+    json = JSON.parse(data);
+    document.title = json.title;
+    document.getElementById("title").innerHTML = json.title;
+
+    for (i=0;i<json.items.length; i++){
+        var div = document.createElement('div');
+        div.className = 'podcast';
+        // Todo: Add audio element (must modify feeds fork first!)
+        div.innerHTML = '<h3>'+json.items[i].title+'</h3><p>'+json.items[i].summary+'</p>';
+
+        var element = document.getElementById("podcasts");
+        element.appendChild(div);
+    }
+});
+
+function get(url, callback) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+}
+</script>
 </body>
-</html>
+</html> 
