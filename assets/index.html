@@ -10,9 +10,11 @@
     <h1 id="title" class="title">Loading</h1>
 
 <div id="podcasts">
-
+    
 </div>
-
+<footer>
+    <p>White Rabbit licensed under the GPLv3</p>
+</footer>
 <script>
 get("/json", function(data){
     json = JSON.parse(data);
@@ -23,7 +25,8 @@ get("/json", function(data){
         var div = document.createElement('div');
         div.className = 'podcast';
         // Todo: Add audio element (must modify feeds fork first!)
-        div.innerHTML = '<h3>'+json.items[i].title+'</h3><p>'+json.items[i].summary+'</p>';
+        div.innerHTML = '<h3>'+json.items[i].title+'</h3><p>'+json.items[i].summary+'</p>'+
+        '<audio controls><source src="'+json.items[i].url+'">';
 
         var element = document.getElementById("podcasts");
         element.appendChild(div);

@@ -1,4 +1,9 @@
 body {
     background-color: #f9f9f9;
-    color: #5b9aff;
+    font-family: monospace;
+}
+
+.podcast {
+    background-color: white;
+    padding:5%;
 }

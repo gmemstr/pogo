@@ -68,7 +68,7 @@ func generate_rss() {
 		feed.Items = []*feeds.Item{
 			&feeds.Item{
 				Title:       title,
-				Link:        &feeds.Link{Href: "https://gitgalaxy.com/podcast"},
+				Link:        &feeds.Link{Href: "https://podcast.gitgalaxy.com/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
 				Enclosure:   &feeds.Enclosure{Url: "https://podcast.gitgalaxy.com/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
 				Description: "Hello, World!",
 				Author:      &feeds.Author{Name: "Gabriel Simmer", Email: "gabriel@gitgalaxy.com"},
