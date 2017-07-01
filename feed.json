@@ -1,21 +1,16 @@
 {
   "version": "https://jsonfeed.org/version/1",
-  "title": "Git Galaxy Stargazers",
-  "home_page_url": "https://gitgalaxy.com",
+  "title": "",
   "description": "discussion about open source projects",
-  "author": {
-    "name": "Gabriel Simmer"
-  },
+  "author": {},
   "items": [
     {
       "id": "",
-      "url": "https://podcast.gitgalaxy.com/download/2017-07-12_TESTING WORLD.mp3",
+      "url": "/download/2017-07-12_TESTING WORLD.mp3",
       "title": "TESTING WORLD",
-      "summary": "Hello, World!",
+      "summary": "testing4",
       "date_published": "2017-07-12T00:00:00Z",
-      "author": {
-        "name": "Gabriel Simmer"
-      }
+      "author": {}
     }
   ]
 }

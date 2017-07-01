@@ -9,7 +9,16 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gmemstr/feeds"
+	"github.com/Tkanos/gonfig"
 )
+
+type Configuration struct {
+	Name	   string
+	Host	   string
+	Email	   string
+	Image      string
+	PodcastUrl string
+}
 
 func watch() {
 	watcher, err := fsnotify.NewWatcher()
@@ -42,6 +51,12 @@ func watch() {
 }
 
 func generate_rss() {
+	configuration := Configuration{}
+	err := gonfig.GetConf("config.json", &configuration)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(configuration)
 	now := time.Now()
 	files, err := ioutil.ReadDir("podcasts")
 	if err != nil {
@@ -49,31 +64,37 @@ func generate_rss() {
 	}
 
 	feed := &feeds.Feed{
-		Title:       "Git Galaxy Stargazers",
-		Link:        &feeds.Link{Href: "https://gitgalaxy.com"},
+		Title:       configuration.Name,
+		Link:        &feeds.Link{Href: configuration.PodcastUrl},
 		Description: "discussion about open source projects",
-		Author:      &feeds.Author{Name: "Gabriel Simmer", Email: "gabriel@gitgalaxy.com"},
+		Author:      &feeds.Author{Name: configuration.Host, Email: configuration.Email},
 		Created:     now,
-		Image:       &feeds.Image{Url: "https://podcast.gitgalaxy.com/assets/podcast_image.png"},
+		Image:       &feeds.Image{Url: configuration.Image},
 	}
 
 	for _, file := range files {
-		s := strings.Split(file.Name(), "_")
-		t := strings.Split(s[1], ".")
-		title := t[0]
-		date, err := time.Parse("2006-01-02", s[0])
-		if err != nil {
-			log.Fatal(err)
-		}
-		feed.Items = []*feeds.Item{
-			&feeds.Item{
-				Title:       title,
-				Link:        &feeds.Link{Href: "https://podcast.gitgalaxy.com/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
-				Enclosure:   &feeds.Enclosure{Url: "https://podcast.gitgalaxy.com/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
-				Description: "Hello, World!",
-				Author:      &feeds.Author{Name: "Gabriel Simmer", Email: "gabriel@gitgalaxy.com"},
-				Created:     date,
-			},
+		if strings.Contains(file.Name(), ".mp3") {
+			s := strings.Split(file.Name(), "_")
+			t := strings.Split(s[1], ".")
+			title := t[0]
+			description,err := ioutil.ReadFile("podcasts/" + strings.Replace(file.Name(), ".mp3", "_SHOWNOTES.md", 2))
+			if err != nil {
+		        log.Fatal(err)
+		    }
+			date, err := time.Parse("2006-01-02", s[0])
+			if err != nil {
+				log.Fatal(err)
+			}
+			feed.Items = []*feeds.Item{
+				&feeds.Item{
+					Title:       title,
+					Link:        &feeds.Link{Href: configuration.PodcastUrl + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
+					Enclosure:   &feeds.Enclosure{Url: configuration.PodcastUrl + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
+					Description: string(description),
+					Author:      &feeds.Author{Name: configuration.Host, Email: configuration.Email},
+					Created:     date,
+				},
+			}
 		}
 	}
 	rss, err := feed.ToRss()
