@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0">
   <channel>
-    <title></title>
-    <link></link>
+    <title>Git Galaxy Stargazers</title>
+    <link>http://podcast.gitgalaxy.com</link>
     <description>discussion about open source projects</description>
-    <pubDate>Sat, 01 Jul 2017 00:23:10 -0700</pubDate>
+    <managingEditor>gabriel@gitgalaxy.com (Gabriel Simmer)</managingEditor>
+    <pubDate>Sat, 01 Jul 2017 23:35:38 -0700</pubDate>
     <image>
-      <url></url>
-      <title></title>
-      <link></link>
+      <url>http://podcast.gitgalaxy.com/assets/podcast_image.png</url>
+      <title>http://podcast.gitgalaxy.com/assets/podcast_image.png</title>
+      <link>http://podcast.gitgalaxy.com/assets/podcast_image.png</link>
     </image>
     <item>
       <title>TESTING WORLD</title>
-      <link>/download/2017-07-12_TESTING WORLD.mp3</link>
-      <description>testing4</description>
-      <enclosure url="/download/2017-07-12_TESTING WORLD.mp3" length="100" type="audio/mpeg"></enclosure>
+      <link>http://podcast.gitgalaxy.com/download/2017-07-12_TESTING WORLD.mp3</link>
+      <description>In this episode, Gabriel discusses the format of the podcast, rambles about his complete lack of knowledge of Machine Learning, and covers a couple interesting Machine Learning centered projects.</description>
+      <enclosure url="http://podcast.gitgalaxy.com/download/2017-07-12_TESTING WORLD.mp3" length="100" type="audio/mpeg"></enclosure>
       <pubDate>Wed, 12 Jul 2017 00:00:00 +0000</pubDate>
     </item>
   </channel>

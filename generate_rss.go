@@ -9,16 +9,8 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gmemstr/feeds"
-	"github.com/Tkanos/gonfig"
+	"github.com/spf13/viper"
 )
-
-type Configuration struct {
-	Name	   string
-	Host	   string
-	Email	   string
-	Image      string
-	PodcastUrl string
-}
 
 func watch() {
 	watcher, err := fsnotify.NewWatcher()
@@ -51,12 +43,12 @@ func watch() {
 }
 
 func generate_rss() {
-	configuration := Configuration{}
-	err := gonfig.GetConf("config.json", &configuration)
-	if err != nil {
-		log.Fatal(err)
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-	fmt.Println(configuration)
 	now := time.Now()
 	files, err := ioutil.ReadDir("podcasts")
 	if err != nil {
@@ -64,12 +56,12 @@ func generate_rss() {
 	}
 
 	feed := &feeds.Feed{
-		Title:       configuration.Name,
-		Link:        &feeds.Link{Href: configuration.PodcastUrl},
+		Title:       viper.GetString("Name"),
+		Link:        &feeds.Link{Href: viper.GetString("PodcastUrl")},
 		Description: "discussion about open source projects",
-		Author:      &feeds.Author{Name: configuration.Host, Email: configuration.Email},
+		Author:      &feeds.Author{Name: viper.GetString("Host"), Email:viper.GetString("Email")},
 		Created:     now,
-		Image:       &feeds.Image{Url: configuration.Image},
+		Image:       &feeds.Image{Url: viper.GetString("Image")},
 	}
 
 	for _, file := range files {
@@ -88,10 +80,10 @@ func generate_rss() {
 			feed.Items = []*feeds.Item{
 				&feeds.Item{
 					Title:       title,
-					Link:        &feeds.Link{Href: configuration.PodcastUrl + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
-					Enclosure:   &feeds.Enclosure{Url: configuration.PodcastUrl + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
+					Link:        &feeds.Link{Href: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
+					Enclosure:   &feeds.Enclosure{Url: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
 					Description: string(description),
-					Author:      &feeds.Author{Name: configuration.Host, Email: configuration.Email},
+					Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
 					Created:     date,
 				},
 			}

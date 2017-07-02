@@ -1,16 +1,21 @@
 {
   "version": "https://jsonfeed.org/version/1",
-  "title": "",
+  "title": "Git Galaxy Stargazers",
+  "home_page_url": "https://podcast.gitgalaxy.com",
   "description": "discussion about open source projects",
-  "author": {},
+  "author": {
+    "name": "Gabriel Simmer"
+  },
   "items": [
     {
       "id": "",
-      "url": "/download/2017-07-12_TESTING WORLD.mp3",
+      "url": "https://podcast.gitgalaxy.com/download/2017-07-12_TESTING WORLD.mp3",
       "title": "TESTING WORLD",
-      "summary": "testing4",
+      "summary": "In this episode, Gabriel discusses the format of the podcast, rambles about his complete lack of knowledge of Machine Learning, and covers a couple interesting Machine Learning centered projects.",
       "date_published": "2017-07-12T00:00:00Z",
-      "author": {}
+      "author": {
+        "name": "Gabriel Simmer"
+      }
     }
   ]
 }
