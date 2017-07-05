@@ -4,8 +4,11 @@ Podcast RSS/CMS in Golang
 ## requirements
 
 [github.com/gmemstr/feeds](https://github.com/gmemstr/feeds)
+
 [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
+
 [github.com/spf13/viper](https://github.com/spf13/viper)
+
 [github.com/gorilla/mux](https://github.com/gorilla/mux)
 
 ## building
