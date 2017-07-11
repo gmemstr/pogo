@@ -1,7 +1,3 @@
-# Custom ignores
-feed.rss
-podcasts/*
-
 # Binaries for programs and plugins
 *.exe
 *.dll
@@ -18,3 +14,7 @@ podcasts/*
 .glide/
 
 feed\.json
+
+podcasts/
+
+feed\.rss
