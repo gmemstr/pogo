@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"crypto/subtle"
 
 	"github.com/gorilla/mux"
 )
@@ -42,6 +43,39 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+/*
+ * Code from stackoverflow by user Timmmm
+ * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
+*/
+func BasicAuth(handler http.HandlerFunc, username, password, realm string) http.HandlerFunc {
+
+    return func(w http.ResponseWriter, r *http.Request) {
+
+        user, pass, ok := r.BasicAuth()
+
+        if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
+            w.Header().Set("WWW-Authenticate", `Basic realm="White Rabbit"`)
+            w.WriteHeader(401)
+            w.Write([]byte("Unauthorised.\n"))
+            return
+        }
+
+        handler(w, r)
+    }
+}
+
+func AdminHandler(w http.ResponseWriter, r *http.Request) {
+	data, err := ioutil.ReadFile("assets/admin.html")
+
+	if err == nil {
+		w.Write(data)
+	} else {
+		w.WriteHeader(404)
+		w.Write([]byte("404 Something went wrong - " + http.StatusText(404)))
+	}
+}
+
 func main() {
 	go watch()
 	r := mux.NewRouter()
@@ -51,5 +85,6 @@ func main() {
 	r.HandleFunc("/rss", RssHandler)
 	r.HandleFunc("/json", JsonHandler)
 	http.Handle("/", r)
+	r.HandleFunc("/admin", BasicAuth(AdminHandler, "g", "password", "Login to White Rabbit admin interface"))
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
