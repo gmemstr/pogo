@@ -66,7 +66,6 @@ func generate_rss() {
 
 	for _, file := range files {
 		if strings.Contains(file.Name(), ".mp3") {
-			fmt.Println(file.Name())
 			s := strings.Split(file.Name(), "_")
 			t := strings.Split(s[1], ".")
 			title := t[0]
@@ -78,11 +77,12 @@ func generate_rss() {
 			if err != nil {
 				log.Fatal(err)
 			}
+			size := fmt.Sprintf("%d", file.Size())
 			feed.Add (
 				&feeds.Item{
 					Title:       title,
-					Link:        &feeds.Link{Href: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
-					Enclosure:   &feeds.Enclosure{Url: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
+					Link:        &feeds.Link{Href: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: size, Type: "audio/mpeg"},
+					Enclosure:   &feeds.Enclosure{Url: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: size, Type: "audio/mpeg"},
 					Description: string(description),
 					Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
 					Created:     date,
