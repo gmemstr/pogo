@@ -78,7 +78,7 @@ func generate_rss() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			feed.Items = []*feeds.Item{
+			feed.Add (
 				&feeds.Item{
 					Title:       title,
 					Link:        &feeds.Link{Href: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: "100", Type: "audio/mpeg"},
@@ -87,7 +87,7 @@ func generate_rss() {
 					Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
 					Created:     date,
 				},
-			}
+			)
 		}
 	}
 	rss, err := feed.ToRss()
