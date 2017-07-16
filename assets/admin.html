@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WR Admin</title>
+    <title>WR Publish</title>
     <link rel="stylesheet" href="/assets/styles.css">
 
 </head>
 <body>
-    <h1>White Rabbit Admin</h1>
+    <h1>White Rabbit Publish</h1>
 	
-	<button id="newcast" class="newcast btn"></button>
+	<form enctype="multipart/form-data" action="/admin/publish" method="post">
+		<label for="title">Episode Title</label>
+		<input type="text" id="title" name="title">
+		<label for="description">Episode Description</label>
+		<textarea name="description" id="description" cols="50" rows="10" style="resize: none;"></textarea>
+		<label for="file">Media File</label>
+		<input type="file" id="file" name="file">
+		<label for="date">Publish Date</label>
+		<input type="date" id="date" name="date">
+		<input type="submit" value="Publish">
+	</form>
+
 
 <footer>
     <p>White Rabbit licensed under the GPLv3</p>

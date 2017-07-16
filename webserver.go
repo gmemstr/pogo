@@ -86,5 +86,6 @@ func main() {
 	r.HandleFunc("/json", JsonHandler)
 	http.Handle("/", r)
 	r.HandleFunc("/admin", BasicAuth(AdminHandler, "g", "password", "Login to White Rabbit admin interface"))
+	r.HandleFunc("/admin/publish", CreateEpisode)
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

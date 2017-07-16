@@ -21,7 +21,7 @@ get("/json", function(data){
     document.title = json.title;
     document.getElementById("title").innerHTML = json.title;
 
-    for (i=0;i<json.items.length; i++){
+    for (i=0;i<=json.items.length; i++){
         var div = document.createElement('div');
         div.className = 'podcast';
         // Todo: Add audio element (must modify feeds fork first!)

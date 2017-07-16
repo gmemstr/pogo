@@ -66,6 +66,7 @@ func generate_rss() {
 
 	for _, file := range files {
 		if strings.Contains(file.Name(), ".mp3") {
+			fmt.Println(file.Name())
 			s := strings.Split(file.Name(), "_")
 			t := strings.Split(s[1], ".")
 			title := t[0]
@@ -97,7 +98,7 @@ func generate_rss() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(rss)
+	// fmt.Println(rss)
 	rss_byte := []byte(rss)
 	ioutil.WriteFile("feed.rss", rss_byte, 0644)
 	json_byte := []byte(json)

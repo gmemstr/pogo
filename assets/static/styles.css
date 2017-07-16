@@ -7,3 +7,7 @@ body {
     background-color: white;
     padding:5%;
 }
+
+label {
+	display: block;
+}
