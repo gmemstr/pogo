@@ -1,9 +1,26 @@
 # whiterabbit
-Podcast RSS/CMS in Golang
+
+![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg) ![shield](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg) ![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)
+
+
+podcast rss generator and cms in golang
+
+## goal
+
+to produce a product that is easy to deploy and easier to use when hosting a podcast from ones own servers. 
+
+## features
+
+ * auto-generate rss feed
+ * flat-file directory structure
+ * human readable files
+ * self publishing interface w/ password protection
+ * basic frontend for listening to episodes
+ * json feed generation for easier parsing
 
 ## requirements
 
-[github.com/gmemstr/feeds](https://github.com/gmemstr/feeds)
+[github.com/gmemstr/feeds](https://github.com/gmemstr/feeds) _this branch contains some fixes for "podcast specific" tags_
 
 [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
