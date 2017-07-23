@@ -1,4 +1,6 @@
 {
+	"AdminUsername": "",
+	"AdminPassword": "",
 	"MediaDirectory": "podcasts/",
 	"Name": "Git Galaxy Stargazers",
 	"Host": "Gabriel Simmer",

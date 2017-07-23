@@ -1,3 +1,9 @@
+/* webserver.go
+ * 
+ * This is the webserver handler for White Rabbit, and handles
+ * all incoming connections, including authentication. 
+*/
+
 package main
 
 import (
@@ -8,8 +14,10 @@ import (
 	"crypto/subtle"
 
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 )
 
+// Prints out contects of feed.rss
 func RssHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/rss+xml")
 	w.WriteHeader(http.StatusOK)
@@ -21,6 +29,7 @@ func RssHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(data))
 }
 
+// Does the same as above method, only with the JSON feed data
 func JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -32,6 +41,7 @@ func JsonHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(data))
 }
 
+// Serve up homepage
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadFile("assets/index.html")
 
@@ -43,7 +53,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
+// Authenticate user using basic webserver authentication
 /*
  * Code from stackoverflow by user Timmmm
  * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
@@ -65,6 +75,7 @@ func BasicAuth(handler http.HandlerFunc, username, password, realm string) http.
     }
 }
 
+// Handler for serving up admin page
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadFile("assets/admin.html")
 
@@ -76,16 +87,34 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Main function that defines routes
 func main() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+
+	// Start the watch() function in generate_rss.go, which
+	// watches for file changes and regenerates the feed 
 	go watch()
+
+	// Define routes
 	r := mux.NewRouter()
+
+	// "Static" paths
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/static"))))
 	r.PathPrefix("/download/").Handler(http.StripPrefix("/download/", http.FileServer(http.Dir("podcasts"))))
+
+	// Paths that require specific handlers
+	http.Handle("/", r) // Pass everything to gorilla mux
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/rss", RssHandler)
 	r.HandleFunc("/json", JsonHandler)
-	http.Handle("/", r)
-	r.HandleFunc("/admin", BasicAuth(AdminHandler, "g", "password", "Login to White Rabbit admin interface"))
+	r.HandleFunc("/admin", BasicAuth(AdminHandler, viper.GetString("AdminUsername"), viper.GetString("AdminPassword"), "Login to White Rabbit admin interface"))
 	r.HandleFunc("/admin/publish", CreateEpisode)
+
+	// We're live!
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

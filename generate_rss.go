@@ -1,3 +1,10 @@
+/* generate_rss.go
+ * 
+ * This file contains functions for monitoring for file changes and 
+ * regenerating the RSS feed accordingly, pulling in shownote files
+ * and configuration parameters
+*/ 
+
 package main
 
 import (
@@ -12,6 +19,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Watch folder for changes, called from webserver.go
 func watch() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -42,6 +50,9 @@ func watch() {
 	<-done
 }
 
+
+// Called when a file has been created / changed, uses gorilla feeds
+// fork to add items to feed object
 func generate_rss() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -90,6 +101,9 @@ func generate_rss() {
 			)
 		}
 	}
+
+	// Translate the feed to both RSS and JSON,
+	// RSS for readers and JSON for frontend (& API I guess)
 	rss, err := feed.ToRss()
 	if err != nil {
 		log.Fatal(err)
@@ -99,8 +113,11 @@ func generate_rss() {
 		log.Fatal(err)
 	}
 	// fmt.Println(rss)
+
+	// Write to files as neccesary 
 	rss_byte := []byte(rss)
 	ioutil.WriteFile("feed.rss", rss_byte, 0644)
+	
 	json_byte := []byte(json)
 	ioutil.WriteFile("feed.json", json_byte, 0644)
 }
