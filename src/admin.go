@@ -13,7 +13,6 @@ import (
 	"io/ioutil"
 	"io"
 	"os"
-	"log"
 )
 
 func CreateEpisode(w http.ResponseWriter, r *http.Request) {
@@ -55,9 +54,6 @@ func RemoveEpisode(episode string) {
 	// Episode should be the full MP3 filename
 	// Remove MP3 first
 	os.Remove(episode)
-	sn,err := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
-	if err != nil {
-		log.Fatal(err)
-	}
+	sn := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
 	os.Remove(sn)
 }
