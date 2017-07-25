@@ -21,4 +21,4 @@ RUN apt update; apt install build-essential -y && \
 
 EXPOSE 8000
 
-CMD whiterabbit
+CMD ./whiterabbit
