@@ -1,3 +1,9 @@
+/* admin.go
+ * 
+ * Here is where all the neccesary functions for managing episodes
+ * live, e.g adding removing etc.
+*/
+
 package main
 
 import (
@@ -7,6 +13,7 @@ import (
 	"io/ioutil"
 	"io"
 	"os"
+	"log"
 )
 
 func CreateEpisode(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +49,15 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	    defer f.Close()
 	    io.Copy(f, file)
 	}
+}
+
+func RemoveEpisode(episode string) {
+	// Episode should be the full MP3 filename
+	// Remove MP3 first
+	os.Remove(episode)
+	sn,err := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	os.Remove(sn)
 }

@@ -1,6 +1,6 @@
 # whiterabbit
 
-![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg) ![shield](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg) ![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)
+[![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg)](https://gitgalaxy.com) [![shield](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg)](https://podcast.gitgalaxy.com) [![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)](https://twitter.com/gitgalaxy)
 
 
 podcast rss generator and cms in golang
