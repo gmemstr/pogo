@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Muli');
+
 body {
-    background-color: #f9f9f9;
-    font-family: monospace;
+	font-family: 'Muli', sans-serif;
+}
+h1,h2,h3,h4,h5 {
+	font-weight: 400;
+}
+.container {
+  margin: 0 auto;
+  padding: 0 2.0rem;
+  position: relative;
+  width: 60vw;
 }
 
 .podcast {
-    background-color: white;
-    padding:5%;
-}
-
-label {
-	display: block;
+	width:70%;
 }

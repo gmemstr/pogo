@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>CMS Loading</title>
     <link rel="stylesheet" href="/assets/styles.css">
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+    <div class="container">
     <h1 id="title" class="title">Loading</h1>
 
 <div id="podcasts">
@@ -15,24 +16,39 @@
 <footer>
     <p>White Rabbit licensed under the GPLv3 | <a href="/rss">RSS</a> <a href="/json">JSON</a></p>
 </footer>
+</div>
 <script>
 get("/json", function(data){
     json = JSON.parse(data);
     document.title = json.title;
     document.getElementById("title").innerHTML = json.title;
 
+    // Iterate through JSON 
     for (i=0;i<=json.items.length; i++){
         var div = document.createElement('div');
         div.className = 'podcast';
-        // Todo: Add audio element (must modify feeds fork first!)
-        div.innerHTML = '<h3>'+json.items[i].title+'</h3><p>'+json.items[i].summary+'</p>'+
+
+        // Hacky date workaround - convert our Go date outpus to unix timestamp,
+        // then convert that into a string
+        date = new Date(Date.parse(json.items[i].date_published))
+        month = date.getMonth()+1;
+        datestring = date.getDate() + "/" + month + "/" + date.getFullYear();
+
+        // Build div for podcast entry
+        div.innerHTML = '<h3>'+json.items[i].title+' <small>'+datestring+'</small></h3><p>'+json.items[i].summary+'</p>'+
         '<audio controls><source src="'+json.items[i].url+'">';
 
+        // We can safely do this because of how the Go code actually
+        // generates the .json file - it's consistent 
+        // Preappend so newest is at the top
         var element = document.getElementById("podcasts");
-        element.appendChild(div);
+        element.insertBefore(div, element.firstChild);
     }
 });
 
+// Wrap xmlHttp into smaller function, I like
+// to include this function whenever I need to
+// do such a thing
 function get(url, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
