@@ -7,6 +7,7 @@
 
 </head>
 <body>
+	<div class="admin">
     <h1>White Rabbit Publish</h1>
 	
 	<form enctype="multipart/form-data" action="/admin/publish" method="post">
@@ -21,9 +22,16 @@
 		<input type="submit" value="Publish">
 	</form>
 
+	<form action="/admin/css" method="post" enctype="multipart/form-data">
+		<label for="css">Custom CSS</label>
+		<textarea name="css" id="css" cols="30" rows="10"></textarea>
+		<input type="submit">
+	</form>
 
 <footer>
     <p>White Rabbit licensed under the GPLv3</p>
 </footer>
+</div>
+
 </body>
 </html> 

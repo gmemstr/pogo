@@ -114,6 +114,7 @@ func main() {
 	r.HandleFunc("/json", JsonHandler)
 	r.HandleFunc("/admin", BasicAuth(AdminHandler, viper.GetString("AdminUsername"), viper.GetString("AdminPassword"), "Login to White Rabbit admin interface"))
 	r.HandleFunc("/admin/publish", CreateEpisode)
+	r.HandleFunc("/admin/css", CustomCss)
 
 	// We're live!
 	log.Fatal(http.ListenAndServe(":8000", r))

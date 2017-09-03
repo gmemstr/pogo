@@ -15,6 +15,29 @@ import (
 	"os"
 )
 
+func CustomCss(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseMultipartForm(32 << 20)
+		css := strings.Join(r.Form["css"], "")
+
+		filename := "custom.css"
+
+		err := ioutil.WriteFile("./assets/static/" + filename, []byte(css), 0644)
+		if err != nil { 
+			panic(err) 
+		} else {
+			w.Write([]byte("success")) 
+		}
+	} else {
+			css,err := ioutil.ReadFile("./assets/static/custom.css")
+			if err != nil {
+				panic (err)
+			} else {
+				w.Write(css)
+			}
+	}
+}
+
 func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseMultipartForm(32 << 20)
