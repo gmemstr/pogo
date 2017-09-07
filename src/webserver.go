@@ -58,14 +58,16 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
  * Code from stackoverflow by user Timmmm
  * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
 */
-func BasicAuth(handler http.HandlerFunc, username, password, realm string) http.HandlerFunc {
+func BasicAuth(handler http.HandlerFunc,) http.HandlerFunc {
 
     return func(w http.ResponseWriter, r *http.Request) {
-
+ 	username := viper.GetString("AdminUsername")
+ 	password := viper.GetString("AdminPassword")
+ 	realm := "Login to White Rabbit admin interface"
         user, pass, ok := r.BasicAuth()
 
         if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
-            w.Header().Set("WWW-Authenticate", `Basic realm="White Rabbit"`)
+            w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
             w.WriteHeader(401)
             w.Write([]byte("Unauthorised.\n"))
             return
@@ -112,10 +114,16 @@ func main() {
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/rss", RssHandler)
 	r.HandleFunc("/json", JsonHandler)
-	r.HandleFunc("/admin", BasicAuth(AdminHandler, viper.GetString("AdminUsername"), viper.GetString("AdminPassword"), "Login to White Rabbit admin interface"))
-	r.HandleFunc("/admin/publish", CreateEpisode)
-	r.HandleFunc("/admin/css", CustomCss)
+
+	// Authenticated endpoints should be passed to BasicAuth()
+	// first
+	r.HandleFunc("/admin", BasicAuth(AdminHandler))
+	r.HandleFunc("/admin/publish", BasicAuth(CreateEpisode))
+	r.HandleFunc("/admin/delete", BasicAuth(RemoveEpisode))
+	r.HandleFunc("/admin/css", BasicAuth(CustomCss))
 
 	// We're live!
+	log.Fatal("Live at localhost:8000")
+
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

@@ -29,18 +29,20 @@ func CustomCss(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("success")) 
 		}
 	} else {
-			css,err := ioutil.ReadFile("./assets/static/custom.css")
-			if err != nil {
-				panic (err)
-			} else {
-				w.Write(css)
-			}
+		css,err := ioutil.ReadFile("./assets/static/custom.css")
+		if err != nil {
+			panic (err)
+		} else {
+			w.Write(css)
+		}
 	}
 }
 
 func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseMultipartForm(32 << 20)
+
+		// Build filename for episode
 		date := strings.Join(r.Form["date"], "")
 		title := strings.Join(r.Form["title"], "")
 
@@ -50,6 +52,7 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(name)
 		description := strings.Join(r.Form["description"], "")
 		fmt.Println(description)
+		// Finish building filenames 
 
 		err := ioutil.WriteFile("./podcasts/" + shownotes, []byte(description), 0644)
 	    if err != nil {

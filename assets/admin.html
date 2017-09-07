@@ -21,17 +21,32 @@
 		<input type="date" id="date" name="date">
 		<input type="submit" value="Publish">
 	</form>
+	<hr />
 
 	<form action="/admin/css" method="post" enctype="multipart/form-data">
 		<label for="css">Custom CSS</label>
-		<textarea name="css" id="css" cols="30" rows="10"></textarea>
-		<input type="submit">
+		<textarea name="css" id="css" cols="120" rows="20"></textarea><br />
+		<input type="submit" value="Submit">
 	</form>
 
 <footer>
     <p>White Rabbit licensed under the GPLv3</p>
 </footer>
 </div>
+<script>
+get("/admin/css", function(data) {
+	document.getElementById("css").innerHTML=data;
+});
 
+function get(url, callback) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+}
+</script>
 </body>
 </html> 
