@@ -16,7 +16,9 @@ to produce a product that is easy to deploy and easier to use when hosting a pod
  * human readable files
  * self publishing interface w/ password protection
  * basic frontend for listening to episodes
+ * custom css and themeing capabilities
  * json feed generation for easier parsing
+ * docker support
 
 ## requirements
 
@@ -32,7 +34,7 @@ to produce a product that is easy to deploy and easier to use when hosting a pod
 
 ```
 make install
-make
+make and run
 ./webserver
 ```
 
@@ -46,3 +48,14 @@ go get github.com/gorilla/mux
 go build webserver.go generate_rss.go admin.go
 ./webserver
 ```
+
+### Makefile
+
+there are several commands in the Makefile, for various reasons. (commands are preceded by the `make` command)
+
+ * `all` - also works by just running `make`, compiles go code to executable
+ * `windows` - creates named compiled .exe
+ * `linux` - creates named compiled binary
+ * `install` - installs go dependencies 
+ * `docker` - build docker image for running elsewhere
+ * `and run` - build and run the executable (remove .exe in file for \*nix)
