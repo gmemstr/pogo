@@ -48,8 +48,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		w.Write(data)
 	} else {
-		w.WriteHeader(404)
-		w.Write([]byte("404 Something went wrong - " + http.StatusText(404)))
+		w.WriteHeader(500)
+		w.Write([]byte("500 Something went wrong - " + http.StatusText(500)))
 	}
 }
 
@@ -84,8 +84,8 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		w.Write(data)
 	} else {
-		w.WriteHeader(404)
-		w.Write([]byte("404 Something went wrong - " + http.StatusText(404)))
+		w.WriteHeader(500)
+		w.Write([]byte("500 Something went wrong - " + http.StatusText(500)))
 	}
 }
 

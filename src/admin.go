@@ -76,9 +76,12 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RemoveEpisode(episode string) {
+func RemoveEpisode(w http.ResponseWriter, r *http.Request) {
 	// Episode should be the full MP3 filename
 	// Remove MP3 first
+	r.ParseMultipartForm(32 << 20)
+
+	episode := strings.Join(r.Form["episode"],"")
 	os.Remove(episode)
 	sn := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
 	os.Remove(sn)
