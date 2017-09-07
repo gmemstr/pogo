@@ -15,3 +15,7 @@ install:
 
 docker:
 	docker build .
+
+and run:
+	go build src/webserver.go src/admin.go src/generate_rss.go
+	./webserver.exe

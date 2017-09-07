@@ -22,3 +22,6 @@ label {
 .admin {
 	text-align: center;
 }
+hr {
+	max-width: 40%;
+}

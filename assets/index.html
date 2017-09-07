@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>CMS Loading</title>
     <link rel="stylesheet" href="/assets/styles.css">
+
     <!-- Custom CSS stylings from admin -->
     <link rel="stylesheet" href="/assets/custom.css">
 
@@ -32,7 +33,7 @@ get("/json", function(data){
         var div = document.createElement('div');
         div.className = 'podcast';
 
-        // Hacky date workaround - convert our Go date outpus to unix timestamp,
+        // Hacky date workaround - convert our Go date output to unix timestamp,
         // then convert that into a string
         date = new Date(Date.parse(json.items[i].date_published))
         month = date.getMonth()+1;
