@@ -123,7 +123,5 @@ func main() {
 	r.HandleFunc("/admin/css", BasicAuth(CustomCss))
 
 	// We're live!
-	log.Fatal("Live at localhost:8000")
-
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

@@ -24,9 +24,11 @@ func CustomCss(w http.ResponseWriter, r *http.Request) {
 
 		err := ioutil.WriteFile("./assets/static/" + filename, []byte(css), 0644)
 		if err != nil { 
+			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
+			
 			panic(err) 
 		} else {
-			w.Write([]byte("success")) 
+			w.Write([]byte("<script>window.location = '/admin#cssupdated';</script>")) 
 		}
 	} else {
 		css,err := ioutil.ReadFile("./assets/static/custom.css")
@@ -56,11 +58,14 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 
 		err := ioutil.WriteFile("./podcasts/" + shownotes, []byte(description), 0644)
 	    if err != nil {
+			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
 	        panic(err)
 	    }
 
 		file, handler, err := r.FormFile("file")
 	    if err != nil {
+			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
+
 	        fmt.Println(err)
 	        return
 	    }
@@ -68,11 +73,14 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	    fmt.Fprintf(w, "%v", handler.Header)
 	    f, err := os.OpenFile("./podcasts/"+filename, os.O_WRONLY|os.O_CREATE, 0666)
 	    if err != nil {
+			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
+
 	        fmt.Println(err)
 	        return
 	    }
 	    defer f.Close()
 	    io.Copy(f, file)
+		w.Write([]byte("<script>window.location = '/admin#published';</script>"))     
 	}
 }
 

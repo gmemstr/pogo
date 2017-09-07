@@ -34,6 +34,16 @@
 </footer>
 </div>
 <script>
+if (window.location.hash == "#cssupdated") {
+	window.alert("CSS Updated!");
+}
+if (window.location.hash == "#published") {
+	window.alert("Episode Published!");
+}
+if (window.location.hash == "#failed") {
+	window.alert("Something went wrong");
+}
+
 get("/admin/css", function(data) {
 	document.getElementById("css").innerHTML=data;
 });
