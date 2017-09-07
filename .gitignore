@@ -18,3 +18,5 @@ feed\.json
 podcasts/
 
 feed\.rss
+
+assets/static/custom\.css
