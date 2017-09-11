@@ -15,7 +15,7 @@
     <h1 id="title" class="title">Loading</h1>
     <h3><a href="/admin">Admin</a></h3>
 
-<div id="podcasts">
+<div id="podcasts" class="podcastlist">
     
 </div>
 <footer>
@@ -31,7 +31,7 @@ get("/json", function(data){
     // Iterate through JSON 
     for (i=0;i<=json.items.length; i++){
         var div = document.createElement('div');
-        div.className = 'podcast';
+        div.className = 'podcastitem';
 
         // Hacky date workaround - convert our Go date output to unix timestamp,
         // then convert that into a string
@@ -40,11 +40,11 @@ get("/json", function(data){
         datestring = date.getDate() + "/" + month + "/" + date.getFullYear();
 
         // Build div for podcast entry
-        div.innerHTML = '<h3>'+json.items[i].title+' <small>'+datestring+'</small></h3><p>'+json.items[i].summary+'</p>'+
-        '<audio controls><source src="'+json.items[i].url+'">';
+        div.innerHTML = '<h3 class="podcasttitle">'+json.items[i].title+' <small class="podcastdate">'+datestring+'</small></h3><p class="podcastdesc">'+json.items[i].summary+'</p>'+
+        '<audio controls class="podcastaudio"><source src="'+json.items[i].url+'">';
 
         // We can safely do this because of how the Go code actually
-        // generates the .json file - it's consistent 
+        // generates the .json file - it's consistent as far as I've been able to see
         // Preappend so newest is at the top
         var element = document.getElementById("podcasts");
         element.insertBefore(div, element.firstChild);

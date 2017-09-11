@@ -1,3 +1,8 @@
+/*
+ * Basic CSS styling for frontend and admin interface.
+ * Overridden by styles in custom.css for the podcast list.
+ */
+
 @import url('https://fonts.googleapis.com/css?family=Muli');
 
 body {
