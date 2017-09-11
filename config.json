@@ -2,10 +2,10 @@
 	"AdminUsername": "",
 	"AdminPassword": "",
 	"MediaDirectory": "podcasts/",
-	"Name": "Git Galaxy Stargazers",
+	"Name": "Git Galaxy Podcast",
 	"Host": "Gabriel Simmer",
 	"Email": "gabriel@gitgalaxy.com",
-	"Description": "open source discussion",
+	"Description": "Discussion about open source projects on the internet.",
 	"Image": "localhost:8000/assets/podcast_image.png",
 	"PodcastUrl": "http://localhost:8000"
 }

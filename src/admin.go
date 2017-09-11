@@ -2,7 +2,7 @@
  * 
  * Here is where all the neccesary functions for managing episodes
  * live, e.g adding removing etc.
-*/
+ */
 
 package main
 
@@ -13,8 +13,9 @@ import (
 	"io/ioutil"
 	"io"
 	"os" // ioOS?
-)
 
+	"github.com/spf13/viper"
+)
 // Write custom CSS to disk or send it back to the client if GET
 func CustomCss(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {

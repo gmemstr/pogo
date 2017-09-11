@@ -2,7 +2,7 @@
  * 
  * This is the webserver handler for Pogo, and handles
  * all incoming connections, including authentication. 
-*/
+ */
 
 package main
 
@@ -59,7 +59,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 /*
  * Code from stackoverflow by user Timmmm
  * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
-*/
+ */
 func BasicAuth(handler http.HandlerFunc,) http.HandlerFunc {
 
     return func(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +74,6 @@ func BasicAuth(handler http.HandlerFunc,) http.HandlerFunc {
             w.Write([]byte("Unauthorised.\n"))
             return
         }
-
         handler(w, r)
     }
 }

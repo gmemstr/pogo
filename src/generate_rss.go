@@ -3,7 +3,7 @@
  * This file contains functions for monitoring for file changes and 
  * regenerating the RSS feed accordingly, pulling in shownote files
  * and configuration parameters
-*/ 
+ */ 
 
 package main
 
@@ -21,6 +21,12 @@ import (
 
 // Watch folder for changes, called from webserver.go
 func watch() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
