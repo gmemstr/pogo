@@ -17,7 +17,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Prints out contects of feed.rss
+// Prints out contents of feed.rss
 func RssHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/rss+xml")
 	w.WriteHeader(http.StatusOK)
