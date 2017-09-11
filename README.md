@@ -1,4 +1,4 @@
-# whiterabbit
+# white rabbit
 
 [![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg)](https://gitgalaxy.com) [![shield](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg)](https://podcast.gitgalaxy.com) [![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)](https://twitter.com/gitgalaxy)
 
@@ -34,7 +34,7 @@ to produce a product that is easy to deploy and easier to use when hosting a pod
 
 ```
 make install
-make and run
+make
 ./webserver
 ```
 
@@ -48,6 +48,15 @@ go get github.com/gorilla/mux
 go build webserver.go generate_rss.go admin.go
 ./webserver
 ```
+
+## file format
+
+white rabbit uses a flat file structure for managing podcast episodes. as such, files have a special naming convention.
+
+for podcast audio files, filenames take the form of YEAR-MONTH-DAY followed by the title. The two values are
+seperated by underscores (`YYYY-MM-DD_TITLE.mp3`).
+
+shownote fils are markdown formatted and simply append `_SHOWNOTES.md` to the existing filename (sans .mp3 of course). 
 
 ### Makefile
 

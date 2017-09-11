@@ -32,9 +32,10 @@ func watch() {
 		for {
 			select {
 			case event := <-watcher.Events:
-				log.Println("event:", event)
+				// log.Println("event:", event)
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Println("modified file:", event.Name)
+					// log.Println("modified file:", event.Name)
+					log.Println("File up(load/date)ed: ", event.Name)
 					generate_rss()
 				}
 			case err := <-watcher.Errors:
@@ -69,7 +70,7 @@ func generate_rss() {
 	feed := &feeds.Feed{
 		Title:       viper.GetString("Name"),
 		Link:        &feeds.Link{Href: viper.GetString("PodcastUrl")},
-		Description: "discussion about open source projects",
+		Description: viper.GetString("Description"),
 		Author:      &feeds.Author{Name: viper.GetString("Host"), Email:viper.GetString("Email")},
 		Created:     now,
 		Image:       &feeds.Image{Url: viper.GetString("Image")},

@@ -5,6 +5,7 @@
 	"Name": "Git Galaxy Stargazers",
 	"Host": "Gabriel Simmer",
 	"Email": "gabriel@gitgalaxy.com",
+	"Description": "open source discussion",
 	"Image": "localhost:8000/assets/podcast_image.png",
 	"PodcastUrl": "http://localhost:8000"
 }

@@ -12,9 +12,10 @@ import (
 	"strings"
 	"io/ioutil"
 	"io"
-	"os"
+	"os" // ioOS?
 )
 
+// Write custom CSS to disk or send it back to the client if GET
 func CustomCss(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseMultipartForm(32 << 20)
@@ -93,4 +94,15 @@ func RemoveEpisode(w http.ResponseWriter, r *http.Request) {
 	os.Remove(episode)
 	sn := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
 	os.Remove(sn)
+}
+
+func EditConfig(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseMultipartForm(32 << 20)
+
+
+	}
+	if r.Method == "GET" {
+
+	}
 }
