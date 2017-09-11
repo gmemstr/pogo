@@ -3,45 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>CMS Loading</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="/assets/styles.css">
 
     <!-- Custom CSS stylings from admin -->
     <link rel="stylesheet" href="/assets/custom.css">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <div class="container">
     <h1 id="title" class="title">Loading</h1>
-    <h3><a href="/admin">Admin</a></h3>
+    <h3><a href="/admin" class="adminlink">Admin</a></h3>
 
 <div id="podcasts" class="podcastlist">
     
 </div>
 <footer>
-    <p>White Rabbit licensed under the GPLv3 | <a href="/rss">RSS</a> <a href="/json">JSON</a></p>
+    <p>White Rabbit licensed under the GPLv3 | <a href="/rss">RSS Feed</a>
 </footer>
 </div>
 <script>
+/*
+ * Function for aggregating podcast episodes and
+ * displaying them.
+ *
+ * Will not be written in ES6 _yet_ until all browsers
+ * support it, avoiding frameworks because of bulk.
+ */
 get("/json", function(data){
     json = JSON.parse(data);
     document.title = json.title;
     document.getElementById("title").innerHTML = json.title;
 
     // Iterate through JSON 
-    for (i=0;i<=json.items.length; i++){
+    for (i=0;i<json.items.length; i++){
         var div = document.createElement('div');
         div.className = 'podcastitem';
 
         // Hacky date workaround - convert our Go date output to unix timestamp,
         // then convert that into a string
+        // Leaves RSS readers happy and date readable on the frontend.
         date = new Date(Date.parse(json.items[i].date_published))
         month = date.getMonth()+1;
         datestring = date.getDate() + "/" + month + "/" + date.getFullYear();
 
         // Build div for podcast entry
-        div.innerHTML = '<h3 class="podcasttitle">'+json.items[i].title+' <small class="podcastdate">'+datestring+'</small></h3><p class="podcastdesc">'+json.items[i].summary+'</p>'+
-        '<audio controls class="podcastaudio"><source src="'+json.items[i].url+'">';
+        div.innerHTML = '<h3 class="podcasttitle">'+
+                        json.items[i].title+' <small class="podcastdate">'+
+                        datestring+'</small></h3><p class="podcastdesc">'+
+                        json.items[i].summary+'</p><audio controls class="podcastaudio"><source src="'+
+                        json.items[i].url+'">';
 
         // We can safely do this because of how the Go code actually
         // generates the .json file - it's consistent as far as I've been able to see
