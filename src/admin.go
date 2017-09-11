@@ -60,7 +60,7 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 		err := ioutil.WriteFile("./podcasts/" + shownotes, []byte(description), 0644)
 	    if err != nil {
 			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
-	        panic(err)
+	        fmt.Println(err)
 	    }
 
 		file, handler, err := r.FormFile("file")

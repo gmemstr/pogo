@@ -48,6 +48,10 @@ func watch() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = watcher.Add("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 	<-done
 }
 
@@ -67,9 +71,10 @@ func generate_rss() {
 		log.Fatal(err)
 	}
 
+	podcasturl := viper.GetString("PodcastUrl")
 	feed := &feeds.Feed{
 		Title:       viper.GetString("Name"),
-		Link:        &feeds.Link{Href: viper.GetString("PodcastUrl")},
+		Link:        &feeds.Link{Href: podcasturl},
 		Description: viper.GetString("Description"),
 		Author:      &feeds.Author{Name: viper.GetString("Host"), Email:viper.GetString("Email")},
 		Created:     now,
@@ -90,11 +95,12 @@ func generate_rss() {
 				log.Fatal(err)
 			}
 			size := fmt.Sprintf("%d", file.Size())
+			link := podcasturl + "/download/" + file.Name()
 			feed.Add (
 				&feeds.Item{
 					Title:       title,
-					Link:        &feeds.Link{Href: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: size, Type: "audio/mpeg"},
-					Enclosure:   &feeds.Enclosure{Url: viper.GetString("PodcastUrl") + "/download/" + file.Name(), Length: size, Type: "audio/mpeg"},
+					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
+					Enclosure:   &feeds.Enclosure{Url: link, Length: size, Type: "audio/mpeg"},
 					Description: string(description),
 					Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
 					Created:     date,

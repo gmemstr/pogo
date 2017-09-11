@@ -20,3 +20,5 @@ podcasts/
 feed\.rss
 
 assets/static/custom\.css
+
+config\.json

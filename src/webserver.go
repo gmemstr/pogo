@@ -1,6 +1,6 @@
 /* webserver.go
  * 
- * This is the webserver handler for White Rabbit, and handles
+ * This is the webserver handler for Pogo, and handles
  * all incoming connections, including authentication. 
 */
 
@@ -54,6 +54,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Authenticate user using basic webserver authentication
+// @TODO: Replace this with a different for of _more secure_
+// authentication that we can POST to instead.
 /*
  * Code from stackoverflow by user Timmmm
  * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
@@ -63,7 +65,7 @@ func BasicAuth(handler http.HandlerFunc,) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
  	username := viper.GetString("AdminUsername")
  	password := viper.GetString("AdminPassword")
- 	realm := "Login to White Rabbit admin interface"
+ 	realm := "Login to Pogo admin interface"
         user, pass, ok := r.BasicAuth()
 
         if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
@@ -123,5 +125,6 @@ func main() {
 	r.HandleFunc("/admin/css", BasicAuth(CustomCss))
 
 	// We're live!
+	fmt.Println("Listening on port :8000")
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
