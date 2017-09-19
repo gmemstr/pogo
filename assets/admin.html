@@ -7,7 +7,10 @@
 
 </head>
 <body>
-	<div class="admin">
+	<div class="notifications" id="notifarea">
+		<span id="notiftext"></span>
+	</div>
+	<div class="admin container">
     <h1>Pogo Publish</h1>
 	
 	<form enctype="multipart/form-data" action="/admin/publish" method="post">
@@ -34,14 +37,19 @@
 </footer>
 </div>
 <script>
+var notifarea = document.getElementById("notifarea");
+var notiftext = document.getElementById("notiftext");
 if (window.location.hash == "#cssupdated") {
-	window.alert("CSS Updated!");
+	notiftext.innerHTML = "CSS updated";
+	notifarea.style = "background-color:green;";
 }
 if (window.location.hash == "#published") {
-	window.alert("Episode Published!");
+	notiftext.innerHTML = "Episode published";
+	notifarea.style = "background-color:green;";
 }
 if (window.location.hash == "#failed") {
-	window.alert("Something went wrong");
+	notiftext.innerHTML = "Something went wrong";
+	notifarea.style = "background-color:red;";
 }
 
 get("/admin/css", function(data) {

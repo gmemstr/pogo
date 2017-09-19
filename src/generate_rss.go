@@ -34,6 +34,8 @@ func watch() {
 	defer watcher.Close()
 
 	done := make(chan bool)
+
+	// Call func asynchronously
 	go func() {
 		for {
 			select {

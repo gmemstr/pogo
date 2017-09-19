@@ -13,9 +13,8 @@ import (
 	"io/ioutil"
 	"io"
 	"os" // ioOS?
-
-	"github.com/spf13/viper"
 )
+
 // Write custom CSS to disk or send it back to the client if GET
 func CustomCss(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
@@ -72,7 +71,7 @@ func CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	        return
 	    }
 	    defer file.Close()
-	    fmt.Fprintf(w, "%v", handler.Header)
+	    fmt.Println(handler.Header)
 	    f, err := os.OpenFile("./podcasts/"+filename, os.O_WRONLY|os.O_CREATE, 0666)
 	    if err != nil {
 			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
@@ -95,15 +94,4 @@ func RemoveEpisode(w http.ResponseWriter, r *http.Request) {
 	os.Remove(episode)
 	sn := strings.Replace(episode, ".mp3", "_SHOWNOTES.md", 2)
 	os.Remove(sn)
-}
-
-func EditConfig(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		r.ParseMultipartForm(32 << 20)
-
-
-	}
-	if r.Method == "GET" {
-
-	}
 }

@@ -7,6 +7,7 @@
 
 body {
 	font-family: 'Muli', sans-serif;
+	margin:0; padding:0;
 }
 h1,h2,h3,h4,h5 {
 	font-weight: 400;
@@ -29,4 +30,12 @@ label {
 }
 hr {
 	max-width: 40%;
+}
+
+.notifications {
+	margin:0; padding:10px;
+	font-size: 130%;
+	height: 1.5vw;
+	text-align: center;
+
 }

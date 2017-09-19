@@ -1,10 +1,10 @@
 {
-	"AdminUsername": "",
-	"AdminPassword": "",
+	"AdminUsername": "gabriel",
+	"AdminPassword": "password1",
 	"MediaDirectory": "podcasts/",
-	"Name": "Git Galaxy Podcast",
+	"Name": "Pogo Test Feed",
 	"Host": "Gabriel Simmer",
-	"Email": "gabriel@gitgalaxy.com",
+	"Email": "admin@localhost",
 	"Description": "Discussion about open source projects on the internet.",
 	"Image": "localhost:8000/assets/podcast_image.png",
 	"PodcastUrl": "http://localhost:8000"
