@@ -43,7 +43,7 @@ func JsonHandler(w http.ResponseWriter, r *http.Request) {
 
 // Serve up homepage
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadFile("assets/1index.html")
+	data, err := ioutil.ReadFile("assets/index.html")
 
 	if err == nil {
 		w.Write(data)
@@ -122,6 +122,8 @@ func main() {
 	r.HandleFunc("/admin/publish", BasicAuth(CreateEpisode))
 	r.HandleFunc("/admin/delete", BasicAuth(RemoveEpisode))
 	r.HandleFunc("/admin/css", BasicAuth(CustomCss))
+
+	r.HandleFunc("/setup", ServeSetup)
 
 	// We're live!
 	fmt.Println("Listening on port :8000")
