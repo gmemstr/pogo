@@ -1,9 +1,9 @@
 /* generate_rss.go
- * 
- * This file contains functions for monitoring for file changes and 
+ *
+ * This file contains functions for monitoring for file changes and
  * regenerating the RSS feed accordingly, pulling in shownote files
  * and configuration parameters
- */ 
+ */
 
 package main
 
@@ -24,7 +24,7 @@ func watch() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
+	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	watcher, err := fsnotify.NewWatcher()
@@ -63,14 +63,13 @@ func watch() {
 	<-done
 }
 
-
 // Called when a file has been created / changed, uses gorilla feeds
 // fork to add items to feed object
 func generate_rss() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
+	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	now := time.Now()
@@ -84,7 +83,7 @@ func generate_rss() {
 		Title:       viper.GetString("Name"),
 		Link:        &feeds.Link{Href: podcasturl},
 		Description: viper.GetString("Description"),
-		Author:      &feeds.Author{Name: viper.GetString("Host"), Email:viper.GetString("Email")},
+		Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
 		Created:     now,
 		Image:       &feeds.Image{Url: viper.GetString("Image")},
 	}
@@ -94,17 +93,17 @@ func generate_rss() {
 			s := strings.Split(file.Name(), "_")
 			t := strings.Split(s[1], ".")
 			title := t[0]
-			description,err := ioutil.ReadFile("podcasts/" + strings.Replace(file.Name(), ".mp3", "_SHOWNOTES.md", 2))
+			description, err := ioutil.ReadFile("podcasts/" + strings.Replace(file.Name(), ".mp3", "_SHOWNOTES.md", 2))
 			if err != nil {
-		        log.Fatal(err)
-		    }
+				log.Fatal(err)
+			}
 			date, err := time.Parse("2006-01-02", s[0])
 			if err != nil {
 				log.Fatal(err)
 			}
 			size := fmt.Sprintf("%d", file.Size())
 			link := podcasturl + "/download/" + file.Name()
-			feed.Add (
+			feed.Add(
 				&feeds.Item{
 					Title:       title,
 					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
@@ -129,10 +128,10 @@ func generate_rss() {
 	}
 	// fmt.Println(rss)
 
-	// Write to files as neccesary 
+	// Write to files as neccesary
 	rss_byte := []byte(rss)
 	ioutil.WriteFile("feed.rss", rss_byte, 0644)
-	
+
 	json_byte := []byte(json)
 	ioutil.WriteFile("feed.json", json_byte, 0644)
 }

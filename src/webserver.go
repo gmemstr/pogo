@@ -1,17 +1,17 @@
 /* webserver.go
- * 
+ *
  * This is the webserver handler for Pogo, and handles
- * all incoming connections, including authentication. 
+ * all incoming connections, including authentication.
  */
 
 package main
 
 import (
+	"crypto/subtle"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"crypto/subtle"
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
@@ -43,13 +43,13 @@ func JsonHandler(w http.ResponseWriter, r *http.Request) {
 
 // Serve up homepage
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadFile("assets/index.html")
+	data, err := ioutil.ReadFile("assets/1index.html")
 
 	if err == nil {
 		w.Write(data)
 	} else {
 		w.WriteHeader(500)
-		w.Write([]byte("500 Something went wrong - " + http.StatusText(500)))
+		w.Write([]byte("Error500 - " + http.StatusText(500)))
 	}
 }
 
@@ -60,22 +60,22 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
  * Code from stackoverflow by user Timmmm
  * https://stackoverflow.com/questions/21936332/idiomatic-way-of-requiring-http-basic-auth-in-go/39591234#39591234
  */
-func BasicAuth(handler http.HandlerFunc,) http.HandlerFunc {
+func BasicAuth(handler http.HandlerFunc) http.HandlerFunc {
 
-    return func(w http.ResponseWriter, r *http.Request) {
- 	username := viper.GetString("AdminUsername")
- 	password := viper.GetString("AdminPassword")
- 	realm := "Login to Pogo admin interface"
-        user, pass, ok := r.BasicAuth()
+	return func(w http.ResponseWriter, r *http.Request) {
+		username := viper.GetString("AdminUsername")
+		password := viper.GetString("AdminPassword")
+		realm := "Login to Pogo admin interface"
+		user, pass, ok := r.BasicAuth()
 
-        if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
-            w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
-            w.WriteHeader(401)
-            w.Write([]byte("Unauthorised.\n"))
-            return
-        }
-        handler(w, r)
-    }
+		if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
+			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
+			w.WriteHeader(401)
+			w.Write([]byte("Unauthorised.\n"))
+			return
+		}
+		handler(w, r)
+	}
 }
 
 // Handler for serving up admin page
@@ -95,12 +95,12 @@ func main() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
+	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 
 	// Start the watch() function in generate_rss.go, which
-	// watches for file changes and regenerates the feed 
+	// watches for file changes and regenerates the feed
 	go watch()
 
 	// Define routes
