@@ -4,7 +4,6 @@ go:
  - 1.8.x
 
 before_install:
- - go get github.com/gmemstr/pogo
  - go get github.com/tools/godep
 
 install:
