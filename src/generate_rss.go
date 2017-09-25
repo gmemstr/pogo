@@ -16,17 +16,10 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gmemstr/feeds"
-	"github.com/spf13/viper"
 )
 
 // Watch folder for changes, called from webserver.go
 func watch() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -66,26 +59,21 @@ func watch() {
 // Called when a file has been created / changed, uses gorilla feeds
 // fork to add items to feed object
 func generate_rss() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
+	config := ReadConfig()
 	now := time.Now()
 	files, err := ioutil.ReadDir("podcasts")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	podcasturl := viper.GetString("PodcastUrl")
+	podcasturl := config.PodcastUrl
 	feed := &feeds.Feed{
-		Title:       viper.GetString("Name"),
+		Title:       config.Name,
 		Link:        &feeds.Link{Href: podcasturl},
-		Description: viper.GetString("Description"),
-		Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
+		Description: config.Description,
+		Author:      &feeds.Author{Name: config.Host, Email: config.Email},
 		Created:     now,
-		Image:       &feeds.Image{Url: viper.GetString("Image")},
+		Image:       &feeds.Image{Url: config.Image},
 	}
 
 	for _, file := range files {
@@ -109,7 +97,7 @@ func generate_rss() {
 					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
 					Enclosure:   &feeds.Enclosure{Url: link, Length: size, Type: "audio/mpeg"},
 					Description: string(description),
-					Author:      &feeds.Author{Name: viper.GetString("Host"), Email: viper.GetString("Email")},
+					Author:      &feeds.Author{Name: config.Host, Email: config.Email},
 					Created:     date,
 				},
 			)

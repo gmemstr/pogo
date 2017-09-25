@@ -14,7 +14,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 )
 
 // Prints out contents of feed.rss
@@ -63,8 +62,9 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func BasicAuth(handler http.HandlerFunc) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		username := viper.GetString("AdminUsername")
-		password := viper.GetString("AdminPassword")
+		config := ReadConfig()
+		username := config.AdminUsername
+		password := config.AdminPassword
 		realm := "Login to Pogo admin interface"
 		user, pass, ok := r.BasicAuth()
 

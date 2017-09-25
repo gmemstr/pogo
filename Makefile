@@ -1,5 +1,5 @@
 all:	
-	go build src/webserver.go src/admin.go src/generate_rss.go src/setup.go
+	go build src/webserver.go src/admin.go src/generate_rss.go src/setup.go src/configreader.go
 
 windows: src/admin.go src/webserver.go src/generate_rss.go
 	go build -o pogoapp.exe src/webserver.go src/admin.go src/generate_rss.go src/setup.go
