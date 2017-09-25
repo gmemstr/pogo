@@ -3,7 +3,6 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
-	// "fmt"
 	"encoding/json"
 	"strings"
 )
@@ -20,7 +19,7 @@ type NewConfig struct {
 // Serve setup.html and config parameters
 func ServeSetup(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		data, err := ioutil.ReadFile("assets/setup.html")
+		data, err := ioutil.ReadFile("assets/web/setup.html")
 
 		if err != nil {
 			panic(err)
@@ -36,8 +35,8 @@ func ServeSetup(w http.ResponseWriter, r *http.Request) {
 			strings.Join(r.Form["podcasthost"], ""),        // Podcast host
 			strings.Join(r.Form["podcastemail"], ""),       // Podcast host email
 			strings.Join(r.Form["podcastdescription"], ""), // Podcast Description
-			"", // Podcast image
-			"", // Podcast location
+			"", 											// Podcast image
+			"", 											// Podcast location
 		}
 
 		b, err := json.Marshal(cnf)
@@ -45,7 +44,7 @@ func ServeSetup(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
-		ioutil.WriteFile("config.json", b, 0644)
+		ioutil.WriteFile("assets/config/config.json", b, 0644)
 		w.Write([]byte("Done"))
 	}
 }

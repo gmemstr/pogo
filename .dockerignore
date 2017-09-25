@@ -18,3 +18,5 @@ feed\.json
 podcasts/
 
 feed\.rss
+
+.travis\.yml

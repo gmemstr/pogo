@@ -35,8 +35,6 @@ func watch() {
 			case event := <-watcher.Events:
 				// log.Println("event:", event)
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					// log.Println("modified file:", event.Name)
-					log.Println("File up(load/date)ed: ", event.Name)
 					generate_rss()
 				}
 			case err := <-watcher.Errors:
@@ -49,7 +47,7 @@ func watch() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = watcher.Add("config.json")
+	err = watcher.Add("assets/config/config.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -118,8 +116,8 @@ func generate_rss() {
 
 	// Write to files as neccesary
 	rss_byte := []byte(rss)
-	ioutil.WriteFile("feed.rss", rss_byte, 0644)
+	ioutil.WriteFile("assets/web/feed.rss", rss_byte, 0644)
 
 	json_byte := []byte(json)
-	ioutil.WriteFile("feed.json", json_byte, 0644)
+	ioutil.WriteFile("assets/web/feed.json", json_byte, 0644)
 }

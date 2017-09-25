@@ -1,0 +1,19 @@
+/*
+ * This is the file of custom CSS styling that
+ * can be set by the publisher.
+ *
+ * If you're writing the custom CSS, please see the reference:
+ * https://github.com/gmemstr/Pogo/wiki/Custom-CSS/
+ */
+
+.container {} /* Basic container from styles.css */
+.title {} /* Page title */
+.adminlink {} /* Link to admin interface */
+
+.podcastlist {} /* Chronological podcast list */
+
+.podcastitem {} /* Single podcast item (group of elements) */
+.podcasttitle {} /* Title of podcast item */
+.podcastdate {} /* Date podcast item was published */
+.podcastdesc {} /* Podcast item description */
+.podcastaudio {} /* Podcast <audio> tag */

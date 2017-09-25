@@ -1,11 +1,11 @@
 all:	
-	go build src/webserver.go src/admin.go src/generate_rss.go src/setup.go src/configreader.go
+	go build webserver.go admin.go generate_rss.go setup.go configreader.go
 
-windows: src/admin.go src/webserver.go src/generate_rss.go
-	go build -o pogoapp.exe src/webserver.go src/admin.go src/generate_rss.go src/setup.go
+windows: admin.go webserver.go generate_rss.go
+	go build -o pogoapp.exe webserver.go admin.go generate_rss.go setup.go
 
-linux: src/admin.go src/webserver.go src/generate_rss.go
-	go build -o pogoapp src/webserver.go src/admin.go src/generate_rss.go src/setup.go
+linux: admin.go webserver.go generate_rss.go
+	go build -o pogoapp webserver.go admin.go generate_rss.go setup.go
 
 install:
 	go get github.com/gmemstr/feeds
@@ -17,5 +17,5 @@ docker:
 	docker build .
 
 and run:
-	go build src/webserver.go src/admin.go src/generate_rss.go src/setup.go
+	go build webserver.go admin.go generate_rss.go setup.go
 	./pogoapp.exe

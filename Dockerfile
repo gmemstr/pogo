@@ -18,7 +18,8 @@ RUN apt update; apt install build-essential -y && \
 	make linux && chmod +x whiterabbit && \
 	ls -al && \
 	mkdir podcasts && \
-	touch feed.rss feed.json && echo '{}' >feed.json
+	touch assets/web/feed.rss assets/web/feed.json && \
+	echo '{}' >assets/web/feed.json
 
 EXPOSE 8000
 

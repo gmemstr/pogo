@@ -20,7 +20,7 @@ import (
 func RssHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/rss+xml")
 	w.WriteHeader(http.StatusOK)
-	data, err := ioutil.ReadFile("feed.rss")
+	data, err := ioutil.ReadFile("assets/web/feed.rss")
 	if err != nil {
 		panic(err)
 	}
@@ -32,7 +32,7 @@ func RssHandler(w http.ResponseWriter, r *http.Request) {
 func JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	data, err := ioutil.ReadFile("feed.json")
+	data, err := ioutil.ReadFile("assets/web/feed.json")
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +42,7 @@ func JsonHandler(w http.ResponseWriter, r *http.Request) {
 
 // Serve up homepage
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadFile("assets/index.html")
+	data, err := ioutil.ReadFile("assets/web/index.html")
 
 	if err == nil {
 		w.Write(data)
@@ -78,7 +78,7 @@ func BasicAuth(handler http.HandlerFunc) http.HandlerFunc {
 
 // Handler for serving up admin page
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadFile("assets/admin.html")
+	data, err := ioutil.ReadFile("assets/web/admin.html")
 
 	if err == nil {
 		w.Write(data)
@@ -98,7 +98,7 @@ func main() {
 	r := mux.NewRouter()
 
 	// "Static" paths
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/static"))))
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/web/static"))))
 	r.PathPrefix("/download/").Handler(http.StripPrefix("/download/", http.FileServer(http.Dir("podcasts"))))
 
 	// Paths that require specific handlers

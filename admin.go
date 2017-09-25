@@ -23,7 +23,7 @@ func CustomCss(w http.ResponseWriter, r *http.Request) {
 
 		filename := "custom.css"
 
-		err := ioutil.WriteFile("./assets/static/"+filename, []byte(css), 0644)
+		err := ioutil.WriteFile("./assets/web/static/"+filename, []byte(css), 0644)
 		if err != nil {
 			w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
 
@@ -32,7 +32,7 @@ func CustomCss(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("<script>window.location = '/admin#cssupdated';</script>"))
 		}
 	} else {
-		css, err := ioutil.ReadFile("./assets/static/custom.css")
+		css, err := ioutil.ReadFile("./assets/web/static/custom.css")
 		if err != nil {
 			panic(err)
 		} else {

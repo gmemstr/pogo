@@ -1,5 +1,5 @@
 {
-	"ImportPath": "podcast/src",
+	"ImportPath": "podcast",
 	"GoVersion": "go1.8",
 	"GodepVersion": "v79",
 	"Deps": [
