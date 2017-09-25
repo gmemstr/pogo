@@ -92,13 +92,6 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
 
 // Main function that defines routes
 func main() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
-
 	// Start the watch() function in generate_rss.go, which
 	// watches for file changes and regenerates the feed
 	go watch()

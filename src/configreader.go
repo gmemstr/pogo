@@ -1,17 +1,19 @@
 package main
 
 import (
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 )
 
 type Config struct {
-	Name        string
-	Host        string
-	Email       string
-	Description string
-	Image       string
-	PodcastUrl  string
+	Name          string
+	Host          string
+	Email         string
+	Description   string
+	Image         string
+	PodcastUrl    string
+	AdminUsername string
+	AdminPassword string
 }
 
 func ReadConfig() Config {
