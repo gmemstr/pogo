@@ -6,4 +6,8 @@ go:
 before_install:
  - go get github.com/tools/godep
 
-script: sh -c 'cd src/; godep restore; cd ..; make linux'
+install:
+  - godep restore
+
+script: 
+  - make linux
