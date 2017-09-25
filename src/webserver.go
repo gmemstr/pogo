@@ -62,11 +62,9 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func BasicAuth(handler http.HandlerFunc) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		config := ReadConfig()
-		username := config.AdminUsername
-		password := config.AdminPassword
 		realm := "Login to Pogo admin interface"
 		user, pass, ok := r.BasicAuth()
+		username, password := GetUser(user)
 
 		if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
 			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)

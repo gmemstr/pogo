@@ -1,6 +1,4 @@
 {
-	"AdminUsername": "gabriel",
-	"AdminPassword": "password1",
 	"MediaDirectory": "podcasts/",
 	"Name": "Pogo Test Feed",
 	"Host": "Gabriel Simmer",

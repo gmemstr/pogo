@@ -12,8 +12,11 @@ type Config struct {
 	Description   string
 	Image         string
 	PodcastUrl    string
-	AdminUsername string
-	AdminPassword string
+}
+
+type User struct {
+	Username string
+	Hash string
 }
 
 func ReadConfig() Config {
@@ -29,4 +32,23 @@ func ReadConfig() Config {
 	}
 
 	return c
+}
+
+func GetUser(username string) (usr string, pwd string) {
+	d, err := ioutil.ReadFile("users.json")
+	if err != nil {
+		panic(err)
+	}
+
+	var u interface{}
+	err = json.Unmarshal(d, &u)
+
+	users := u.(map[string]interface{})
+	for k, v := range users {
+    	if k == username {
+    		usr = k
+    		pwd = v.(string)
+    	}
+	}
+	return
 }
