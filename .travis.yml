@@ -1,13 +1,20 @@
 language: go
+sudo: false
+matrix:
+  include:
+    - go: 1.7
+    - go: 1.8
+    - go: 1.x
+    - go: master
+  allow_failures:
+    - go: master
 
-go:
- - 1.8.x
+  before_install:
+   - go get github.com/tools/godep
 
-before_install:
- - go get github.com/tools/godep
-
-install:
-  - godep restore
-
-script: 
-  - make linux
+  install:
+    - godep restore
+  
+  script: 
+    - go test
+    - make linux
