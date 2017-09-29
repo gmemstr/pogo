@@ -57,7 +57,10 @@ func watch() {
 // Called when a file has been created / changed, uses gorilla feeds
 // fork to add items to feed object
 func generate_rss() {
-	config := ReadConfig()
+	config,err := ReadConfig()
+	if err != nil {
+		panic(err)
+	}
 	now := time.Now()
 	files, err := ioutil.ReadDir("podcasts")
 	if err != nil {

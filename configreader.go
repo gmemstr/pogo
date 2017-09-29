@@ -22,24 +22,23 @@ type User struct {
 }
 
 // Read config file and make values accesible
-func ReadConfig() Config {
+func ReadConfig() (c Config, err error) {
 	// Read config.json
 	d, err := ioutil.ReadFile("assets/config/config.json")
 	if err != nil {
-		panic(err)
+		return
 	}
 
-	var c Config // Unmarshal json
 	err = json.Unmarshal(d, &c)
 	if err != nil {
-		panic(err)
+		return
 	}
 
-	return c
+	return
 }
 
 // Return single users username & passsword *hash*
-func GetUser(username string) (usr string, pwd string) {
+func AuthUser(username string, password string) (authd bool) {
 	// Read users json file
 	d, err := ioutil.ReadFile("assets/config/users.json")
 	if err != nil {
@@ -52,10 +51,9 @@ func GetUser(username string) (usr string, pwd string) {
 	// Iterate through map until we find matching username
 	users := u.(map[string]interface{})
 	for k, v := range users {
-		if k == username {
-			usr = k
-			pwd = v.(string)
+		if k == username && v.(string) == password {
+			authd = true
 		}
 	}
-	return // Returns k & v values, aka username and password *hash*
+	return // Returns whether user is authenticated or not
 }

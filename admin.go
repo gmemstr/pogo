@@ -11,7 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"os" // ioOS?
+	"os"
 	"strings"
 )
 

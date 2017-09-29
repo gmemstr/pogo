@@ -7,7 +7,6 @@
 package main
 
 import (
-	"crypto/subtle"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -64,9 +63,8 @@ func BasicAuth(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		realm := "Login to Pogo admin interface"
 		user, pass, ok := r.BasicAuth()
-		username, password := GetUser(user)
 
-		if !ok || subtle.ConstantTimeCompare([]byte(user), []byte(username)) != 1 || subtle.ConstantTimeCompare([]byte(pass), []byte(password)) != 1 {
+		if !AuthUser(user,pass) || !ok {
 			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
 			w.WriteHeader(401)
 			w.Write([]byte("Unauthorised.\n"))
