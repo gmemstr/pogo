@@ -29,7 +29,7 @@ type RouterContext struct {
 
 // User struct denotes the data is stored in the cookie
 type User struct {
-	Name string `json:"name"`
+	Username string `json:"username"`
 }
 
 // ReadAndServeFile reads the file from specified location and sends it in response

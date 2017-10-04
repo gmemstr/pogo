@@ -65,9 +65,14 @@ func Init() *mux.Router {
 	// Authenticated endpoints should be passed to BasicAuth()
 	// first
 	r.Handle("/admin", Handle(
-		auth.RequireAuthorization(),
+		// auth.RequireAuthorization(),
 		adminHandler(),
 	))
+
+	r.Handle("/login", Handle(
+		loginHandler(),
+	))
+
 	// r.HandleFunc("/admin/publish", BasicAuth(CreateEpisode))
 	// r.HandleFunc("/admin/delete", BasicAuth(RemoveEpisode))
 	// r.HandleFunc("/admin/css", BasicAuth(CustomCss))
@@ -77,6 +82,71 @@ func Init() *mux.Router {
 	)).Methods("GET", "POST")
 
 	return r
+}
+
+func loginHandler() common.Handler {
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		if r.Method == "GET" {
+			w.Header().Set("Content-Type", "text/html")
+			return common.ReadAndServeFile("assets/web/login.html", w)
+		}
+
+		d, err := ioutil.ReadFile("assets/config/users.json")
+		if err != nil {
+
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in reading users.json: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+
+		}
+
+		err = r.ParseForm()
+
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in parsing form: %v", err),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+
+		username := r.Form.Get("username")
+		password := r.Form.Get("password")
+		if username == "" || password == "" {
+			return &common.HTTPError{
+				Message:    "username or password is empty",
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+
+		var u map[string]string
+		err = json.Unmarshal(d, &u) // Unmarshal into interface
+
+		// Iterate through map until we find matching username
+		for k, v := range u {
+			if k == username && v == password {
+				// Create a cookie here because the credentials are correct
+				err = auth.CreateSession(&common.User{
+					Username: k,
+				}, w)
+				if err != nil {
+					return &common.HTTPError{
+						Message:    err.Error(),
+						StatusCode: http.StatusInternalServerError,
+					}
+				}
+				// And now redirect the user to admin page
+				http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
+				return nil
+			}
+		}
+
+		return &common.HTTPError{
+			Message:    "Invalid credentials!",
+			StatusCode: http.StatusUnauthorized,
+		}
+	}
 }
 
 // Handles /, /feed and /json endpoints
@@ -136,13 +206,6 @@ func serveSetup() common.Handler {
 
 		ioutil.WriteFile("assets/config/config.json", b, 0644)
 		w.Write([]byte("Done"))
-		return nil
-	}
-}
-
-func redirectHandler() common.Handler {
-	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
-
 		return nil
 	}
 }
