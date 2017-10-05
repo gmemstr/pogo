@@ -65,13 +65,13 @@ func Init() *mux.Router {
 	// Authenticated endpoints should be passed to BasicAuth()
 	// first
 	r.Handle("/admin", Handle(
-		// auth.RequireAuthorization(),
+		auth.RequireAuthorization(),
 		adminHandler(),
-	))
+	)).Methods("GET", "POST")
 
 	r.Handle("/login", Handle(
 		loginHandler(),
-	))
+	)).Methods("GET", "POST")
 
 	// r.HandleFunc("/admin/publish", BasicAuth(CreateEpisode))
 	// r.HandleFunc("/admin/delete", BasicAuth(RemoveEpisode))
@@ -87,6 +87,11 @@ func Init() *mux.Router {
 func loginHandler() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 
+		if _, err := r.Cookie("POGO_SESSION"); err == nil {
+			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
+			return nil
+		}
+
 		if r.Method == "GET" {
 			w.Header().Set("Content-Type", "text/html")
 			return common.ReadAndServeFile("assets/web/login.html", w)
@@ -99,7 +104,6 @@ func loginHandler() common.Handler {
 				Message:    fmt.Sprintf("error in reading users.json: %v", err),
 				StatusCode: http.StatusInternalServerError,
 			}
-
 		}
 
 		err = r.ParseForm()
@@ -127,15 +131,18 @@ func loginHandler() common.Handler {
 		for k, v := range u {
 			if k == username && v == password {
 				// Create a cookie here because the credentials are correct
-				err = auth.CreateSession(&common.User{
+				c, err := auth.CreateSession(&common.User{
 					Username: k,
-				}, w)
+				})
 				if err != nil {
 					return &common.HTTPError{
 						Message:    err.Error(),
 						StatusCode: http.StatusInternalServerError,
 					}
 				}
+
+				// r.AddCookie(c)
+				w.Header().Add("Set-Cookie", c.String())
 				// And now redirect the user to admin page
 				http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
 				return nil
