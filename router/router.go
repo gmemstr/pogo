@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/ishanjain28/pogo/admin"
 	"github.com/ishanjain28/pogo/auth"
 	"github.com/ishanjain28/pogo/common"
 )
@@ -73,9 +74,20 @@ func Init() *mux.Router {
 		loginHandler(),
 	)).Methods("GET", "POST")
 
-	// r.HandleFunc("/admin/publish", BasicAuth(CreateEpisode))
-	// r.HandleFunc("/admin/delete", BasicAuth(RemoveEpisode))
-	// r.HandleFunc("/admin/css", BasicAuth(CustomCss))
+	r.Handle("/admin/publish", Handle(
+		auth.RequireAuthorization(),
+		admin.CreateEpisode(),
+	)).Methods("POST")
+
+	r.Handle("/admin/delete", Handle(
+		auth.RequireAuthorization(),
+		admin.RemoveEpisode(),
+	)).Methods("GET")
+
+	r.Handle("/admin/css", Handle(
+		auth.RequireAuthorization(),
+		admin.CustomCss(),
+	)).Methods("GET", "POST")
 
 	r.Handle("/setup", Handle(
 		serveSetup(),
