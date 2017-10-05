@@ -9,9 +9,9 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/ishanjain28/pogo/admin"
-	"github.com/ishanjain28/pogo/auth"
-	"github.com/ishanjain28/pogo/common"
+	"github.com/gmemstr/pogo/admin"
+	"github.com/gmemstr/pogo/auth"
+	"github.com/gmemstr/pogo/common"
 )
 
 type NewConfig struct {

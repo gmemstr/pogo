@@ -28,31 +28,31 @@
 		},
 		{
 			"checksumSHA1": "Cf75U+sv4XXINivPXM5aIWyY1yU=",
-			"path": "github.com/ishanjain28/pogo",
+			"path": "github.com/gmemstr/pogo",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
 		{
 			"checksumSHA1": "bq+3AC2jozq2rZzsEPbwKA4wcIQ=",
-			"path": "github.com/ishanjain28/pogo/admin",
+			"path": "github.com/gmemstr/pogo/admin",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
 		{
 			"checksumSHA1": "9uX7jVa+SM+8P7qj/4x9yOs8DiI=",
-			"path": "github.com/ishanjain28/pogo/auth",
+			"path": "github.com/gmemstr/pogo/auth",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
 		{
 			"checksumSHA1": "3EhVu129mzuxvbwxNnCo5OgSVdQ=",
-			"path": "github.com/ishanjain28/pogo/common",
+			"path": "github.com/gmemstr/pogo/common",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
 		{
 			"checksumSHA1": "mLUbmoS9nI5RPDV/nr4TDEjwtqU=",
-			"path": "github.com/ishanjain28/pogo/router",
+			"path": "github.com/gmemstr/pogo/router",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
@@ -63,5 +63,5 @@
 			"revisionTime": "2017-07-14T13:21:52Z"
 		}
 	],
-	"rootPath": "github.com/ishanjain28/pogo"
+	"rootPath": "github.com/gmemstr/pogo"
 }

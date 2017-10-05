@@ -15,7 +15,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ishanjain28/pogo/common"
+	"github.com/gmemstr/pogo/common"
 )
 
 const (

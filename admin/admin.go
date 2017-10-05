@@ -14,7 +14,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ishanjain28/pogo/common"
+	"github.com/gmemstr/pogo/common"
 )
 
 // Write custom CSS to disk or send it back to the client if GET

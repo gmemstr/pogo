@@ -11,7 +11,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/ishanjain28/pogo/router"
+	"github.com/gmemstr/pogo/router"
 )
 
 // Main function that defines routes
