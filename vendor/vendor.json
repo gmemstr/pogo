@@ -1,0 +1,67 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "x2Km0Qy3WgJJnV19Zv25VwTJcBM=",
+			"path": "github.com/fsnotify/fsnotify",
+			"revision": "4da3e2cfbabc9f751898f250b49f2439785783a1",
+			"revisionTime": "2017-03-29T04:21:07Z"
+		},
+		{
+			"checksumSHA1": "NPyOovl2klGM7jbd2ptL+DS8Ci0=",
+			"path": "github.com/gmemstr/feeds",
+			"revision": "3f959598ffdb5e852fde75a3f0f9ee7721a8d692",
+			"revisionTime": "2017-09-27T23:17:02Z"
+		},
+		{
+			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "zmCk+lgIeiOf0Ng9aFP9aFy8ksE=",
+			"path": "github.com/gorilla/mux",
+			"revision": "4c1c3952b7d9d0a061a3fa7b36fd373ba0398ebc",
+			"revisionTime": "2017-04-27T04:12:50Z"
+		},
+		{
+			"checksumSHA1": "ZHkna0aUIjUSQtjUflsL11HimeE=",
+			"path": "github.com/ishanjain28/pogo",
+			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
+			"revisionTime": "2017-10-05T06:17:26Z"
+		},
+		{
+			"checksumSHA1": "bq+3AC2jozq2rZzsEPbwKA4wcIQ=",
+			"path": "github.com/ishanjain28/pogo/admin",
+			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
+			"revisionTime": "2017-10-05T06:17:26Z"
+		},
+		{
+			"checksumSHA1": "9uX7jVa+SM+8P7qj/4x9yOs8DiI=",
+			"path": "github.com/ishanjain28/pogo/auth",
+			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
+			"revisionTime": "2017-10-05T06:17:26Z"
+		},
+		{
+			"checksumSHA1": "3EhVu129mzuxvbwxNnCo5OgSVdQ=",
+			"path": "github.com/ishanjain28/pogo/common",
+			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
+			"revisionTime": "2017-10-05T06:17:26Z"
+		},
+		{
+			"checksumSHA1": "mLUbmoS9nI5RPDV/nr4TDEjwtqU=",
+			"path": "github.com/ishanjain28/pogo/router",
+			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
+			"revisionTime": "2017-10-05T06:17:26Z"
+		},
+		{
+			"checksumSHA1": "1Ae34VaDBPZRr7O7hsuMTX/BZ9U=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "4cd6d1a821c7175768725b55ca82f14683a29ea4",
+			"revisionTime": "2017-07-14T13:21:52Z"
+		}
+	],
+	"rootPath": "github.com/ishanjain28/pogo"
+}
