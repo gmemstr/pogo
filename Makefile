@@ -1,13 +1,12 @@
-SOURCEFILES = webserver.go admin.go generate_rss.go setup.go configreader.go
 
 all:	
-	go build $(SOURCEFILES)
+	go build -o pogoapp
 
 windows:
-	go build -o pogoapp.exe $(SOURCEFILES)
+	go build -o pogoapp.exe 
 
 linux:
-	go build -o pogoapp $(SOURCEFILES)
+	go build -o pogoapp
 
 install:
 	go get github.com/gmemstr/feeds
