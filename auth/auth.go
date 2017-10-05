@@ -20,17 +20,16 @@ import (
 
 const (
 	enc = "cookie_session_encryption"
-	// mac = "cookie_session_signature"
 
 	// This is the key with which each cookie is encrypted, I'll recommend moving it to a env file.
-	secret       = "super_long_string_difficult_to_crack"
+	secret       = "super_long_string_difficult_to"
 	cookieName   = "POGO_SESSION"
 	cookieExpiry = 60 * 60 * 24 * 30 // 30 days in seconds
 )
 
 func RequireAuthorization() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
-		usr, err := decryptCookie(r)
+		usr, err := DecryptCookie(r)
 		if err != nil {
 			fmt.Println(err.Error())
 			if strings.Contains(r.Header.Get("Accept"), "html") || r.Method == "GET" {
@@ -45,6 +44,7 @@ func RequireAuthorization() common.Handler {
 				StatusCode: http.StatusUnauthorized,
 			}
 		}
+
 		rc.User = usr
 		return nil
 	}
@@ -100,7 +100,7 @@ func CreateSession(u *common.User) (*http.Cookie, error) {
 	return c, nil
 }
 
-func decryptCookie(r *http.Request) (*common.User, error) {
+func DecryptCookie(r *http.Request) (*common.User, error) {
 
 	c, err := r.Cookie(cookieName)
 	if err != nil {

@@ -99,7 +99,7 @@ func Init() *mux.Router {
 func loginHandler() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 
-		if _, err := r.Cookie("POGO_SESSION"); err == nil {
+		if _, err := auth.DecryptCookie(r); err == nil {
 			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
 			return nil
 		}
