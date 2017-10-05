@@ -27,7 +27,7 @@
 			"revisionTime": "2017-04-27T04:12:50Z"
 		},
 		{
-			"checksumSHA1": "ZHkna0aUIjUSQtjUflsL11HimeE=",
+			"checksumSHA1": "Cf75U+sv4XXINivPXM5aIWyY1yU=",
 			"path": "github.com/ishanjain28/pogo",
 			"revision": "cc12ddc46d0367c56b7d82faec6245a652e8e0d2",
 			"revisionTime": "2017-10-05T06:17:26Z"
@@ -57,7 +57,7 @@
 			"revisionTime": "2017-10-05T06:17:26Z"
 		},
 		{
-			"checksumSHA1": "1Ae34VaDBPZRr7O7hsuMTX/BZ9U=",
+			"checksumSHA1": "VmSgg0+AGPLOL6WYjSNMKqelZhI=",
 			"path": "golang.org/x/sys/unix",
 			"revision": "4cd6d1a821c7175768725b55ca82f14683a29ea4",
 			"revisionTime": "2017-07-14T13:21:52Z"

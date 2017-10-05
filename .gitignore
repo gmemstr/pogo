@@ -22,5 +22,3 @@ feed\.rss
 assets/static/custom\.css
 
 config\.json
-/vendor/github.com
-/vendor/golang.org
