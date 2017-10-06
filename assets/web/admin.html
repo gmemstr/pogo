@@ -7,64 +7,24 @@
 
 </head>
 <body>
-	<div class="notifications" id="notifarea">
-		<span id="notiftext"></span>
+	<div class="container">
+	<div id="app">
+		<a href="#publish">Publish</a>
+		<a href="#customcss">Theme</a>
+		<h1>{{ header }}</h1>
+		<h3>{{ current_page }}</h3>
+		<div v-if="page == 'publish'">
+			<episode-publish-form></episode-publish-form>
+		</div>
+		<div v-if="page == 'customcss'">
+			<custom-css></custom-css>
+		</div>
 	</div>
-	<div class="admin container">
-    <h1>Pogo Publish</h1>
-	
-	<form enctype="multipart/form-data" action="/admin/publish" method="post">
-		<label for="title">Episode Title</label>
-		<input type="text" id="title" name="title">
-		<label for="description">Episode Description</label>
-		<textarea name="description" id="description" cols="100" rows="20" style="resize: none;"></textarea>
-		<label for="file">Media File</label>
-		<input type="file" id="file" name="file">
-		<label for="date">Publish Date</label>
-		<input type="date" id="date" name="date">
-		<input type="submit" value="Publish">
-	</form>
-	<hr />
-
-	<form action="/admin/css" method="post" enctype="multipart/form-data">
-		<label for="css">Custom CSS</label>
-		<textarea name="css" id="css" cols="120" rows="20"></textarea><br />
-		<input type="submit" value="Submit">
-	</form>
-
 <footer>
     <p>Pogo licensed under the GPLv3</p>
 </footer>
 </div>
-<script>
-var notifarea = document.getElementById("notifarea");
-var notiftext = document.getElementById("notiftext");
-if (window.location.hash == "#cssupdated") {
-	notiftext.innerHTML = "CSS updated";
-	notifarea.style = "background-color:green;";
-}
-if (window.location.hash == "#published") {
-	notiftext.innerHTML = "Episode published";
-	notifarea.style = "background-color:green;";
-}
-if (window.location.hash == "#failed") {
-	notiftext.innerHTML = "Something went wrong";
-	notifarea.style = "background-color:red;";
-}
-
-get("/admin/css", function(data) {
-	document.getElementById("css").innerHTML=data;
-});
-
-function get(url, callback) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", url, true);
-    xmlHttp.send(null);
-}
-</script>
+<script src="/assets/vue.js"></script>
+<script src="/assets/app.js"></script>
 </body>
 </html> 
