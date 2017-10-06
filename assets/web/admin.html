@@ -9,22 +9,17 @@
 <body>
 	<div class="container">
 	<div id="app">
-		<a href="#publish">Publish</a>
-		<a href="#customcss">Theme</a>
+		<router-link to="/publish">Publish</router-link> <router-link to="/theme">Theme</router-link>
 		<h1>{{ header }}</h1>
 		<h3>{{ current_page }}</h3>
-		<div v-if="page == 'publish'">
-			<episode-publish-form></episode-publish-form>
-		</div>
-		<div v-if="page == 'customcss'">
-			<custom-css></custom-css>
-		</div>
+		<router-view></router-view>
 	</div>
 <footer>
     <p>Pogo licensed under the GPLv3</p>
 </footer>
 </div>
 <script src="/assets/vue.js"></script>
+<script src="https://unpkg.com/vue-router@2.7.0/dist/vue-router.js"></script>
 <script src="/assets/app.js"></script>
 </body>
 </html> 
