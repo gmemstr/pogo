@@ -13,10 +13,20 @@ import (
 	"log"
 	"strings"
 	"time"
+	"encoding/json"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gmemstr/feeds"
 )
+
+type Config struct {
+	Name        string
+	Host        string
+	Email       string
+	Description string
+	Image       string
+	PodcastUrl  string
+}
 
 // Watch folder for changes, called from webserver.go
 func watch() {
@@ -35,7 +45,7 @@ func watch() {
 			case event := <-watcher.Events:
 				// log.Println("event:", event)
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					generate_rss()
+					GenerateRss()
 				}
 			case err := <-watcher.Errors:
 				log.Println("error:", err)
@@ -54,13 +64,19 @@ func watch() {
 	<-done
 }
 
-// Called when a file has been created / changed, uses gorilla feeds
-// fork to add items to feed object
-func generate_rss() {
-	config,err := ReadConfig()
+// Iterate through podcasts directory and build feed
+// object, then compile as json and rss and write to file 
+func GenerateRss() {
+	d, err := ioutil.ReadFile("assets/config/config.json")
 	if err != nil {
 		panic(err)
 	}
+	var config Config
+	err = json.Unmarshal(d, &config)
+	if err != nil {
+		panic(err)
+	}
+
 	now := time.Now()
 	files, err := ioutil.ReadDir("podcasts")
 	if err != nil {
