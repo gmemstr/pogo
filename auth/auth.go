@@ -22,8 +22,7 @@ import (
 const (
 	enc = "cookie_session_encryption"
 
-	// This is the key with which each cookie is encrypted, I'll recommend moving it to a env file.
-	secret       = os.Getenv("POGO_SECRET")
+	// This is the key with which each cookie is encrypted, I'll recommend moving it to a env file
 	cookieName   = "POGO_SESSION"
 	cookieExpiry = 60 * 60 * 24 * 30 // 30 days in seconds
 )
@@ -52,6 +51,7 @@ func RequireAuthorization() common.Handler {
 }
 
 func CreateSession(u *common.User) (*http.Cookie, error) {
+	secret := os.Getenv("POGO_SECRET")
 
 	iv, err := generateRandomString(16)
 	if err != nil {
@@ -102,6 +102,7 @@ func CreateSession(u *common.User) (*http.Cookie, error) {
 }
 
 func DecryptCookie(r *http.Request) (*common.User, error) {
+	secret := os.Getenv("POGO_SECRET")
 
 	c, err := r.Cookie(cookieName)
 	if err != nil {
