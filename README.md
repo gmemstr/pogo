@@ -31,6 +31,10 @@ To produce a product that is easy to deploy and easier to use when hosting a pod
 ```
 godep restore
 go build
+# Set enviornment variable
+export POGO_SECRET=secret
+# Windows
+# set POGO_SECRET=secret
 ./podcast
 ```
 

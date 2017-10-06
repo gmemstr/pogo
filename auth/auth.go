@@ -14,6 +14,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"os"
 
 	"github.com/gmemstr/pogo/common"
 )
@@ -22,7 +23,7 @@ const (
 	enc = "cookie_session_encryption"
 
 	// This is the key with which each cookie is encrypted, I'll recommend moving it to a env file.
-	secret       = "super_long_string_difficult_to"
+	secret       = os.Getenv("POGO_SECRET")
 	cookieName   = "POGO_SESSION"
 	cookieExpiry = 60 * 60 * 24 * 30 // 30 days in seconds
 )
