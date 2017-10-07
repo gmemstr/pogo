@@ -23,7 +23,7 @@ matrix:
 
   install:
     - godep restore
-
+-
   script: 
     - go vet .
     - go test
