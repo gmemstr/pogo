@@ -11,7 +11,7 @@ ENV PATH=$GOPATH/bin:$PATH
 WORKDIR $GOPATH/src/github.com/gmemstr/pogo
 
 # Add source to container so we can build
-ADD . %GOPATH%/src/github.com/gmemstrpogo
+ADD . $GOPATH/src/github.com/gmemstr/pogo
 
 # 1. Install make and dependencies
 # 2. Install Go dependencies
