@@ -15,7 +15,7 @@ ADD . /POGO
 # 6. Create empty feed files
 RUN go get github.com/tools/godep && \
 	godep restore && \
-	make linux && chmod +x pogoapp && \
+	go build -o pogoapp && chmod +x pogoapp && \
 	ls -al && \
 	mkdir podcasts && \
 	touch assets/web/feed.rss assets/web/feed.json && \
