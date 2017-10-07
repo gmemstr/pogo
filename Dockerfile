@@ -1,11 +1,17 @@
 # Use latest golang image
 FROM golang:latest
 
+RUN  mkdir -p /go/src \
+  && mkdir -p /go/bin \
+  && mkdir -p /go/pkg
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$PATH
+
 # Set working directory
-WORKDIR /POGO
+WORKDIR $GOPATH/src/github.com/gmemstr/pogo
 
 # Add source to container so we can build
-ADD . /POGO
+ADD . %GOPATH%/src/github.com/gmemstrpogo
 
 # 1. Install make and dependencies
 # 2. Install Go dependencies
@@ -25,4 +31,4 @@ RUN go get github.com/tools/godep && \
 
 EXPOSE 8000
 
-CMD ./pogoapp
+CMD ./$GOPATH/src/github.com/gmemstr/pogoapp
