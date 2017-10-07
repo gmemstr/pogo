@@ -1,17 +1,11 @@
 # Use latest golang image
 FROM golang:latest
 
-RUN  mkdir -p /go/src \
-  && mkdir -p /go/bin \
-  && mkdir -p /go/pkg
-ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:$PATH
-
 # Set working directory
-WORKDIR /go/src/POGO
+WORKDIR /POGO
 
 # Add source to container so we can build
-ADD . /go/src/POGO
+ADD . /POGO
 
 # 1. Install make and dependencies
 # 2. Install Go dependencies
@@ -19,7 +13,7 @@ ADD . /go/src/POGO
 # 4. List directory structure (for debugging really)\
 # 5. Make empty podcast direcory
 # 6. Create empty feed files
-RUN go get godep && \
+RUN go get github.com/tools/godep && \
 	godep restore && \
 	make linux && chmod +x pogoapp && \
 	ls -al && \
