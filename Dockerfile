@@ -2,10 +2,10 @@
 FROM golang:latest
 
 # Set working directory
-WORKDIR /POGO
+WORKDIR %GOPATH%/src/POGO
 
 # Add source to container so we can build
-ADD . /POGO
+ADD . %GOPATH%/src/POGO
 
 # 1. Install make and dependencies
 # 2. Install Go dependencies
@@ -13,7 +13,8 @@ ADD . /POGO
 # 4. List directory structure (for debugging really)\
 # 5. Make empty podcast direcory
 # 6. Create empty feed files
-RUN godep restore && \
+RUN go get godep && \
+	godep restore && \
 	make linux && chmod +x pogoapp && \
 	ls -al && \
 	mkdir podcasts && \
