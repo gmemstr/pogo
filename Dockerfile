@@ -1,11 +1,17 @@
 # Use latest golang image
 FROM golang:latest
 
+RUN  mkdir -p /go/src \
+  && mkdir -p /go/bin \
+  && mkdir -p /go/pkg
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$PATH
+
 # Set working directory
-WORKDIR %GOPATH%/src/POGO
+WORKDIR /go/src/POGO
 
 # Add source to container so we can build
-ADD . %GOPATH%/src/POGO
+ADD . /go/src/POGO
 
 # 1. Install make and dependencies
 # 2. Install Go dependencies
