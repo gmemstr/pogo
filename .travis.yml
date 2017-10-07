@@ -27,4 +27,4 @@ script:
   - docker build -t gmemstr/pogo .
   - docker run -d --name pogo  -p 8000:8000 gmemstr/pogo
   - sleep 10
-  - docker ps
+  - docker ps -a
