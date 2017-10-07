@@ -29,6 +29,6 @@ RUN ls -al && go get github.com/tools/godep && \
 	echo '{}' >assets/config/users.json && \
 	echo '{}' >assets/config/config.json
 
-EXPOSE 8000
+EXPOSE 3000
 
-CMD ./$GOPATH/src/github.com/gmemstr/pogoapp
+CMD ./go/src/github.com/gmemstr/pogoapp
