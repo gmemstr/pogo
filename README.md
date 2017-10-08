@@ -31,7 +31,7 @@ To produce a product that is easy to deploy and easier to use when hosting a pod
 ```
 godep restore
 go build
-# Set enviornment variable
+# Set environment variable
 export POGO_SECRET=secret
 # Windows
 # set POGO_SECRET=secret
@@ -43,7 +43,6 @@ export POGO_SECRET=secret
 Pogo uses a flat file structure for managing podcast episodes. As such, files have a special naming convention.
 
 For podcast audio files, filenames take the form of YEAR-MONTH-DAY followed by the title. The two values are
-seperated by underscores (`YYYY-MM-DD_TITLE.mp3`).
+separated by underscores (`YYYY-MM-DD_TITLE.mp3`).
 
-Shownote fils are markdown formatted and simply append `_SHOWNOTES.md` to the existing filename (sans .mp3 of course). 
-
+"Shownote" files are markdown formatted and simply append `_SHOWNOTES.md` to the existing filename (sans .mp3 of course). 

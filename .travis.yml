@@ -1,5 +1,7 @@
 language: go
 sudo: false
+services:
+  - docker
 matrix:
   include:
     - go: 1.7
@@ -14,9 +16,15 @@ matrix:
 
   install:
     - godep restore
-  
+    
   script: 
     - go vet .
     - go test
     - go build
     - ls -al
+
+script: 
+  - docker build -t gmemstr/pogo .
+  - docker run -d --name pogo  -p 3000:3000 gmemstr/pogo
+  - sleep 10
+  - docker ps -a | grep gmemstr/pogo
