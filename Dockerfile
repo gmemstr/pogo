@@ -31,4 +31,4 @@ RUN ls -al && go get github.com/tools/godep && \
 
 EXPOSE 3000
 
-CMD ./go/src/github.com/gmemstr/pogoapp
+CMD ./pogoapp
