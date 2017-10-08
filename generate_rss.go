@@ -92,7 +92,7 @@ func GenerateRss() {
 		Created:     now,
 		Image:       &feeds.Image{Url: config.Image},
 	}
-
+	i := 0
 	for _, file := range files {
 		if strings.Contains(file.Name(), ".mp3") {
 			s := strings.Split(file.Name(), "_")
@@ -110,6 +110,7 @@ func GenerateRss() {
 			link := podcasturl + "/download/" + file.Name()
 			feed.Add(
 				&feeds.Item{
+					Id:			 string(i),
 					Title:       title,
 					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
 					Enclosure:   &feeds.Enclosure{Url: link, Length: size, Type: "audio/mpeg"},
@@ -119,6 +120,7 @@ func GenerateRss() {
 				},
 			)
 		}
+		i = i + 1;
 	}
 
 	// Translate the feed to both RSS and JSON,
