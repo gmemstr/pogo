@@ -25,6 +25,6 @@ matrix:
 
 script: 
   - docker build -t gmemstr/pogo .
-  - docker run -d --rm --name pogo  -p 3000:3000 gmemstr/pogo
+  - docker run -d --name pogo  -p 3000:3000 gmemstr/pogo
   - sleep 10
-  - docker ps -a
+  - docker ps -a | grep gmemstr/pogo
