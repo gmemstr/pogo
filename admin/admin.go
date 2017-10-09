@@ -51,6 +51,55 @@ func CustomCss() common.Handler {
 	}
 }
 
+func EditEpisode() common.Handler {
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+		err := r.ParseMultipartForm(32 << 20)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+
+		PreviousFilename := strings.Join(r.Form["previousfilename"], "")
+
+		date := strings.Join(r.Form["date"], "")
+		title := strings.Join(r.Form["title"], "")
+
+		name := fmt.Sprintf("%v_%v", date, title)
+		filename := "./podcasts/" + name + ".mp3"
+		shownotes := "./podcasts/" + name + "_SHOWNOTES.md"
+		fmt.Println(filename)
+		description := strings.Join(r.Form["description"], "")
+
+		if ("./podcasts" + PreviousFilename + ".mp3" != filename) {
+			err = os.Rename("./podcasts/" + PreviousFilename + ".mp3", filename)
+			if err != nil {
+				return &common.HTTPError{
+					Message:    err.Error(),
+					StatusCode: http.StatusBadRequest,
+				}
+			}
+			err = os.Rename("./podcasts/" + PreviousFilename + "_SHOWNOTES.md", shownotes)
+			if err != nil {
+				return &common.HTTPError{
+					Message:    err.Error(),
+					StatusCode: http.StatusBadRequest,
+				}
+			}
+		}
+		err = ioutil.WriteFile(shownotes, []byte(description), 0644)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		w.Write([]byte("<script>window.location = '/admin#published';</script>"))
+		return nil
+	}
+}
+
 func CreateEpisode() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 		err := r.ParseMultipartForm(32 << 20)
@@ -68,9 +117,7 @@ func CreateEpisode() common.Handler {
 		name := fmt.Sprintf("%v_%v", date, title)
 		filename := name + ".mp3"
 		shownotes := name + "_SHOWNOTES.md"
-		fmt.Println(name)
 		description := strings.Join(r.Form["description"], "")
-		fmt.Println(description)
 		// Finish building filenames
 
 		err = ioutil.WriteFile("./podcasts/"+shownotes, []byte(description), 0644)
