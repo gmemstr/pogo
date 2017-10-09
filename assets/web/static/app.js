@@ -46,7 +46,7 @@ const episodemanagement = {
 }
 
 const episodeedit = {
-    template: '<div><div><h3>Edit Episode</h3><form enctype="multipart/form-data" action="/admin/edit" method="post"><label for="title">Episode Title</label><input type="text" id="title" name="title" :value="episode.title"><label for="description">Episode Description</label><textarea name="description" id="description" cols="100" rows="20" style="resize: none;">{{ episode.description }}</textarea><label for="date">Publish Date</label><input type="date" id="date" name="date"><input type="submit" value="Publish"></form></div></div>',
+    template: '<div><div><h3>Edit Episode</h3><form enctype="multipart/form-data" action="/admin/edit" method="post"><label for="title">Episode Title</label><input type="text" id="title" name="title" :value="episode.title"><label for="description">Episode Description</label><textarea name="description" id="description" cols="100" rows="20" style="resize: none;">{{ episode.description }}</textarea><label for="date">Publish Date</label><input type="date" id="date" name="date" :value="episode.time"><input name="previousfilename" id="previousfilename" :value="episode.previousfilename" type="hidden"><input type="submit" value="Publish"></form></div></div>',
     data() {
         return {
             loading: false,
@@ -76,11 +76,15 @@ const episodeedit = {
                     var t = JSON.parse(items).items
                     for (var i = t.length - 1; i >= 0; i--) {
                         if (t[i].id == this.$route.params.id) {
+                        	time = t[i].date_published.split("T")
+                        	var prev = time[0] + "_" + t[i].title
                             this.episode = {
                                 title: t[i].title,
                                 description: t[i].summary,
                                 url: t[i].url,
-                                id: t[i].id
+                                id: t[i].id,
+                                time: time[0],
+                                previousfilename: prev
                             }
                         }
                     }
