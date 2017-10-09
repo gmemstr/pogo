@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"strconv"
 	"time"
 	"encoding/json"
 
@@ -110,7 +111,7 @@ func GenerateRss() {
 			link := podcasturl + "/download/" + file.Name()
 			feed.Add(
 				&feeds.Item{
-					Id:			 string(i),
+					Id:			 strconv.Itoa(i),
 					Title:       title,
 					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
 					Enclosure:   &feeds.Enclosure{Url: link, Length: size, Type: "audio/mpeg"},
