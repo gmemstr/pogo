@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gorilla/mux"
 	"github.com/gmemstr/pogo/admin"
@@ -146,7 +147,7 @@ func loginHandler() common.Handler {
 
 		// Iterate through map until we find matching username
 		for k, v := range u {
-			if k == username && v == password {
+			if k == username && bcrypt.CompareHashAndPassword([]byte(v), []byte(password)) == nil {
 				// Create a cookie here because the credentials are correct
 				c, err := auth.CreateSession(&common.User{
 					Username: k,
