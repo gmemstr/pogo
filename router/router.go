@@ -121,7 +121,7 @@ func loginHandler() common.Handler {
 			}
 		}
 
-		stmt, err := db.Prepare("SELECT * FROM users WHERE username=?")
+		statement, err := db.Prepare("SELECT * FROM users WHERE username=?")
 
 		if _, err := auth.DecryptCookie(r); err == nil {
 			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
@@ -143,7 +143,7 @@ func loginHandler() common.Handler {
 
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
-		rows, err := stmt.Query(username)
+		rows, err := statement.Query(username)
 
 		if username == "" || password == "" {
 			return &common.HTTPError{
@@ -182,6 +182,7 @@ func loginHandler() common.Handler {
 			w.Header().Add("Set-Cookie", c.String())
 			// And now redirect the user to admin page
 			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
+			db.Close()
 			return nil
 		}
 

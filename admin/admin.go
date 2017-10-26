@@ -13,24 +13,33 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"encoding/json"
+	"golang.org/x/crypto/bcrypt"
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/gmemstr/pogo/common"
 )
 
-type Users struct {
-	Username UserOpts `json:u`
-}
-
-type UserOpts struct {
-	Password string `json:password`
-	Realname string `json:realname`
-	Email 	 string `json:email`
-}
-
+// Add user to the SQLite3 database
 func AddUser() common.Handler {
 
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error opening sqlite3 file: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		statement, err := db.Prepare("INSERT INTO users(username,hash,realname,email) VALUES (?,?,?,?)")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
 
 		err := r.ParseMultipartForm(32 << 20)
 		if err != nil {
@@ -40,34 +49,17 @@ func AddUser() common.Handler {
 			}
 		}
 
-		d, err := ioutil.ReadFile("assets/config/users.json")
-		if err != nil {
-			return &common.HTTPError{
-				Message:    err.Error(),
-				StatusCode: http.StatusBadRequest,
-			}
-		}
-		var u []Users
-		err = json.Unmarshal(d, &u)
-
-		// username := strings.Join(r.Form["username"], "")
+		username := strings.Join(r.Form["username"], "")
 		password := strings.Join(r.Form["password"], "")
 		realname := strings.Join(r.Form["realname"], "")
 		email := strings.Join(r.Form["email"], "")
 
-		// newuseropts := &UserOpts {
-		// 	Password: password,
-		// 	Realname: realname,
-		// 	Email: email,
-		// }
+		hash, err := bcrypt.GenerateFromPassword(password, 4)
 
-		u = append(u, Users{UserOpts{Password: password,Realname: realname,Email: email,}})
-		json.Marshal(u)
-		fmt.Println(u)
-
-		w.Write([]byte("<script>window.location = '/admin#useradded';</script>"))
+		result, err := statement.Exec(username,hash,realname,email)
+		w.Write([]byte("<script>window.location = '/admin#/users/added';</script>"))
+		db.Close()
 		return nil
-
 	}
 
 }
