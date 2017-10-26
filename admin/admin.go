@@ -41,7 +41,7 @@ func AddUser() common.Handler {
 			}
 		}
 
-		err := r.ParseMultipartForm(32 << 20)
+		err = r.ParseMultipartForm(32 << 20)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    err.Error(),
@@ -54,9 +54,15 @@ func AddUser() common.Handler {
 		realname := strings.Join(r.Form["realname"], "")
 		email := strings.Join(r.Form["email"], "")
 
-		hash, err := bcrypt.GenerateFromPassword(password, 4)
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 
-		result, err := statement.Exec(username,hash,realname,email)
+		_, err = statement.Exec(username,hash,realname,email)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
 		w.Write([]byte("<script>window.location = '/admin#/users/added';</script>"))
 		db.Close()
 		return nil
