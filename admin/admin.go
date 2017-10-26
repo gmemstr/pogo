@@ -13,9 +13,64 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"encoding/json"
 
 	"github.com/gmemstr/pogo/common"
 )
+
+type Users struct {
+	Username UserOpts `json:u`
+}
+
+type UserOpts struct {
+	Password string `json:password`
+	Realname string `json:realname`
+	Email 	 string `json:email`
+}
+
+func AddUser() common.Handler {
+
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		err := r.ParseMultipartForm(32 << 20)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+
+		d, err := ioutil.ReadFile("assets/config/users.json")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		var u []Users
+		err = json.Unmarshal(d, &u)
+
+		// username := strings.Join(r.Form["username"], "")
+		password := strings.Join(r.Form["password"], "")
+		realname := strings.Join(r.Form["realname"], "")
+		email := strings.Join(r.Form["email"], "")
+
+		// newuseropts := &UserOpts {
+		// 	Password: password,
+		// 	Realname: realname,
+		// 	Email: email,
+		// }
+
+		u = append(u, Users{UserOpts{Password: password,Realname: realname,Email: email,}})
+		json.Marshal(u)
+		fmt.Println(u)
+
+		w.Write([]byte("<script>window.location = '/admin#useradded';</script>"))
+		return nil
+
+	}
+
+}
 
 // Write custom CSS to disk or send it back to the client if GET
 

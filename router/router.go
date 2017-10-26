@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"strings"
 	"golang.org/x/crypto/bcrypt"
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/gorilla/mux"
 	"github.com/gmemstr/pogo/admin"
@@ -80,6 +83,11 @@ func Init() *mux.Router {
 		admin.CreateEpisode(),
 	)).Methods("POST")
 
+	r.Handle("/admin/newuser", Handle(
+		auth.RequireAuthorization(),
+		admin.AddUser(),
+	)).Methods("POST")
+
 	r.Handle("/admin/edit", Handle(
 		auth.RequireAuthorization(),
 		admin.EditEpisode(),
@@ -104,6 +112,16 @@ func Init() *mux.Router {
 
 func loginHandler() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in reading user database: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		stmt, err := db.Prepare("SELECT * FROM users WHERE username=?")
 
 		if _, err := auth.DecryptCookie(r); err == nil {
 			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
@@ -115,17 +133,7 @@ func loginHandler() common.Handler {
 			return common.ReadAndServeFile("assets/web/login.html", w)
 		}
 
-		d, err := ioutil.ReadFile("assets/config/users.json")
-		if err != nil {
-
-			return &common.HTTPError{
-				Message:    fmt.Sprintf("error in reading users.json: %v", err),
-				StatusCode: http.StatusInternalServerError,
-			}
-		}
-
 		err = r.ParseForm()
-
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error in parsing form: %v", err),
@@ -135,37 +143,48 @@ func loginHandler() common.Handler {
 
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
+		rows, err := stmt.Query(username)
+
 		if username == "" || password == "" {
 			return &common.HTTPError{
 				Message:    "username or password is empty",
 				StatusCode: http.StatusBadRequest,
 			}
 		}
-
-		var u map[string]string
-		err = json.Unmarshal(d, &u) // Unmarshal into interface
-
-		// Iterate through map until we find matching username
-		for k, v := range u {
-			if k == username && bcrypt.CompareHashAndPassword([]byte(v), []byte(password)) == nil {
-				// Create a cookie here because the credentials are correct
-				c, err := auth.CreateSession(&common.User{
-					Username: k,
-				})
-				if err != nil {
-					return &common.HTTPError{
-						Message:    err.Error(),
-						StatusCode: http.StatusInternalServerError,
-					}
+		var id 	  int
+		var dbun  string
+		var dbhsh string
+		var dbrn  string
+		var dbem  string
+		for rows.Next() {
+			err := rows.Scan(&id,&dbun,&dbhsh,&dbrn,&dbem)
+			if err != nil {
+				return &common.HTTPError{
+					Message:    fmt.Sprintf("error in decoding sql data", err),
+					StatusCode: http.StatusBadRequest,
 				}
-
-				// r.AddCookie(c)
-				w.Header().Add("Set-Cookie", c.String())
-				// And now redirect the user to admin page
-				http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
-				return nil
 			}
+
 		}
+		// Create a cookie here because the credentials are correct
+		if dbun == username && bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
+		c, err := auth.CreateSession(&common.User{
+				Username: username,
+			})
+			if err != nil {
+				return &common.HTTPError{
+					Message:    err.Error(),
+					StatusCode: http.StatusInternalServerError,
+				}
+			}
+
+			// r.AddCookie(c)
+			w.Header().Add("Set-Cookie", c.String())
+			// And now redirect the user to admin page
+			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
+			return nil
+		}
+
 
 		return &common.HTTPError{
 			Message:    "Invalid credentials!",
