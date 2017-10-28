@@ -123,6 +123,7 @@ func ListUsers() common.Handler {
 		}
 		fin, err := json.Marshal(res)
 		w.Write(fin)
+		db.Close()
 
 		return nil
 	}
