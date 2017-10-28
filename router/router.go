@@ -103,6 +103,16 @@ func Init() *mux.Router {
 		admin.CustomCss(),
 	)).Methods("GET", "POST")
 
+	r.Handle("/admin/adduser", Handle(
+		auth.RequireAuthorization(),
+		admin.AddUser(),
+	)).Methods("POST")
+
+	r.Handle("/admin/listusers", Handle(
+		auth.RequireAuthorization(),
+		admin.ListUsers(),
+	)).Methods("GET")
+
 	r.Handle("/setup", Handle(
 		serveSetup(),
 	)).Methods("GET", "POST")

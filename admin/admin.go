@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	"database/sql"
 
@@ -20,6 +21,15 @@ import (
 
 	"github.com/gmemstr/pogo/common"
 )
+type User struct {
+	Id 	  int `json:"id"`
+	Dbun  string `json:"username"`
+	Dbrn  string `json:"realname"`
+	Dbem  string `json:"email"`
+}
+type UserList struct {
+	Users []User
+}
 
 // Add user to the SQLite3 database
 func AddUser() common.Handler {
@@ -68,6 +78,54 @@ func AddUser() common.Handler {
 		return nil
 	}
 
+}
+
+func ListUsers() common.Handler {
+
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in reading user database: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		// NEVER SELECT hash ENTRY
+		statement, err := db.Prepare("SELECT id,username,realname,email FROM users")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in reading user database: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		rows, err := statement.Query()
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in executing user SELECT: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		res := []User{}
+
+		for rows.Next() {
+			var u User
+			err := rows.Scan(&u.Id, &u.Dbun, &u.Dbrn, &u.Dbem)
+			if err != nil {
+				return &common.HTTPError{
+					Message:    fmt.Sprintf("error in decoding sql data", err),
+					StatusCode: http.StatusBadRequest,
+				}
+			}
+			res = append(res, u)
+		}
+		fin, err := json.Marshal(res)
+		w.Write(fin)
+
+		return nil
+	}
 }
 
 // Write custom CSS to disk or send it back to the client if GET
