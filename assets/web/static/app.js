@@ -15,19 +15,19 @@ const episodepublishform = {
 </div>`
 }
 
-const usermanagement = {
+const userlist = {
     template: `<div>
     <table style="width:100%">
         <tr>
-            <th>Title</th>
-            <th>URL</th>
-            <th>Actions</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Edit</th>
         </tr>
         <tr v-for="item in items">
-            <td>{{ item.id }}: {{ item.title }}</td>
-            <td>{{ item.url }}</td>
+            <td>{{ item.username }}</td>
+            <td>{{ item.email }}</td>
             <td>
-                <router-link :to="\'edit/\' + item.id">Edit</router-link>
+                <router-link :to="\'user/\' + item.id">Edit</router-link>
             </td>
         </tr>
     </table>
@@ -58,14 +58,79 @@ const usermanagement = {
                 if (err) {
                     this.error = err.toString()
                 } else {
-                    console.log(items);
-                    var t = JSON.parse(items).items
+                    var t = JSON.parse(items).reverse();
                     for (var i = t.length - 1; i >= 0; i--) {
                         this.items.push({
-                            title: t[i].title,
-                            url: t[i].url,
-                            id: t[i].id
+                            id: t[i].id,
+                            username: t[i].username,
+                            email: t[i].email,
                         })
+                    }
+                }
+            })
+        }
+    }
+}
+
+const useredit = {
+    template: `<div>
+    <div>
+        <h3>Edit User</h3>
+        <form enctype="multipart/form-data" action="/admin/edituser" method="post">
+        <label for="title">Username</label>
+        <input type="text" id="title" name="title" :value="user.username">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" :value="user.email">
+        <label for="realname">Real Name</label>
+        <input type="text" id="realname" name="realname" :value="user.realname">
+
+        <label for="newpw1">New Password</label>
+        <input type="password" id="newpw1" name="newpw1">
+        <label for="newpw2">Repeat New Password</label>
+        <input type="password" id="newpw2" name="newpw2">
+        <label for="oldpw">Old Password</label>
+        <input type="password" id="oldpw" name="oldpw">
+        <input name="id" id="id" :value="user.id" type="hidden">
+        <br />
+        <input type="submit" value="Save"></form>
+    </div>
+</div>`,
+    data() {
+        return {
+            loading: false,
+            user: null,
+            error: null
+        }
+    },
+    created() {
+        // fetch the data when the view is created and the data is
+        // already being observed
+        this.fetchData()
+    },
+    watch: {
+        // call again the method if the route changes
+        '$route': 'fetchData'
+    },
+    methods: {
+        fetchData() {
+            this.error = this.user = []
+            this.loading = true
+
+            get("/admin/listusers", (err, items) => {
+                this.loading = false
+                if (err) {
+                    this.error = err.toString()
+                } else {
+                    var t = JSON.parse(items)
+                    for (var i = t.length - 1; i >= 0; i--) {
+                        if (t[i].id == this.$route.params.id) {
+                            this.user = {
+                                id: t[i].id,
+                                username: t[i].username,
+                                email: t[i].email,
+                                realname: t[i].realname
+                            }
+                        }
                     }
                 }
             })
@@ -234,7 +299,9 @@ const routes = [
     { path: '/publish', component: episodepublishform },
     { path: '/manage', component: episodemanagement },
     { path: '/theme', component: customcss },
-    { path: '/edit/:id', component: episodeedit }
+    { path: '/edit/:id', component: episodeedit },
+    { path: '/users/', component: userlist },
+    { path: '/user/:id', component: useredit }
 ]
 
 const router = new VueRouter({
