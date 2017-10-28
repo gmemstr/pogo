@@ -23,3 +23,5 @@ assets/static/custom\.css
 
 config\.json
 vendor/
+
+assets/config/users\.db
