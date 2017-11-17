@@ -9,8 +9,9 @@
 			"Rev": "4da3e2cfbabc9f751898f250b49f2439785783a1"
 		},
 		{
-			"ImportPath": "github.com/gmemstr/feeds",
-			"Rev": "c8f8657f3a1f60cff88624dc069d369d77c658a1"
+			"ImportPath": "github.com/gorilla/feeds",
+			"Comment": "v1.0.0",
+			"Rev": "4b936b5221c53c99fcd4b15ac0b8c38ff490ab89"
 		},
 		{
 			"ImportPath": "github.com/gorilla/mux",
