@@ -77,8 +77,8 @@ const useredit = {
     <div>
         <h3>Edit User</h3>
         <form enctype="multipart/form-data" action="/admin/edituser" method="post">
-        <label for="title">Username</label>
-        <input type="text" id="title" name="title" :value="user.username">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" :value="user.username">
         <label for="email">Email</label>
         <input type="text" id="email" name="email" :value="user.email">
         <label for="realname">Real Name</label>

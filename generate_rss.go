@@ -17,7 +17,7 @@ import (
 	"encoding/json"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/gmemstr/feeds"
+	"github.com/gorilla/feeds"
 )
 
 type Config struct {

@@ -83,6 +83,11 @@ func Init() *mux.Router {
 		admin.CreateEpisode(),
 	)).Methods("POST")
 
+	r.Handle("/admin/edituser", Handle(
+		auth.RequireAuthorization(),
+		admin.EditUser(),
+	)).Methods("POST")
+
 	r.Handle("/admin/newuser", Handle(
 		auth.RequireAuthorization(),
 		admin.AddUser(),

@@ -80,6 +80,95 @@ func AddUser() common.Handler {
 
 }
 
+func EditUser() common.Handler {
+
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error in reading user database: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		err = r.ParseMultipartForm(32 << 20)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		id := strings.Join(r.Form["id"], "")
+		username := strings.Join(r.Form["username"], "")
+		password := strings.Join(r.Form["oldpw"], "")
+		newpassword := strings.Join(r.Form["newpw1"], "")
+		realname := strings.Join(r.Form["realname"], "")
+		email := strings.Join(r.Form["email"], "")
+		pwhash, err := bcrypt.GenerateFromPassword([]byte(password), 4)
+
+		statement, err := db.Prepare("UPDATE users SET username=?, hash=?, realname=?, email=? WHERE id=?")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		pwstatement, err := db.Prepare("SELECT hash FROM users WHERE id=?")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		tmp, err := pwstatement.Query(id)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		var hash []byte
+
+		for tmp.Next() {
+			err = tmp.Scan(&hash)
+			if err != nil {
+				return &common.HTTPError{
+					Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
+					StatusCode: http.StatusInternalServerError,
+				}
+			}
+		}
+		fmt.Println(hash)
+		if bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {
+			fmt.Println("Passwords do not match")
+			w.Write([]byte("<script>window.location = '/admin#/users/editerror';</script>"))
+			db.Close()
+
+			return nil
+		}
+
+		if newpassword != "" {
+			pwhash, err = bcrypt.GenerateFromPassword([]byte(newpassword), 4)
+		} 
+
+		_, err = statement.Exec(username,pwhash,realname,email,id)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		w.Write([]byte("<script>window.location = '/admin#/users/edited';</script>"))
+		db.Close()
+
+		return nil
+	}
+}
+
 func ListUsers() common.Handler {
 
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {

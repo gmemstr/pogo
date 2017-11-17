@@ -20,7 +20,7 @@ To produce a product that is easy to deploy and easier to use when hosting a pod
 
 ## Requirements
 
-[github.com/gmemstr/feeds](https://github.com/gmemstr/feeds) _this branch contains some fixes for "podcast specific" tags_
+[github.com/gorilla/feeds](https://github.com/gorilla/feeds)
 
 [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
