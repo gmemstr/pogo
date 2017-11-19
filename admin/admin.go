@@ -140,7 +140,7 @@ func EditUser() common.Handler {
 					Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
 					StatusCode: http.StatusInternalServerError,
 				}
-			}
+			}	
 		}
 		fmt.Println(hash)
 		if bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {

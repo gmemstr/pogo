@@ -15,8 +15,13 @@ const episodepublishform = {
 </div>`
 }
 
+const message = {
+    template: `<div><h3>{{ this.$route.params.message }}</h3></div>`
+}
+
 const userlist = {
     template: `<div>
+    <router-link :to="\'users/new\'">New</router-link>
     <table style="width:100%">
         <tr>
             <th>Username</th>
@@ -70,6 +75,26 @@ const userlist = {
             })
         }
     }
+}
+
+const usernew = {
+    template: `<div>
+    <div>
+        <h3>New User</h3>
+        <form enctype="multipart/form-data" action="/admin/adduser" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email">
+        <label for="realname">Real Name</label>
+        <input type="text" id="realname" name="realname">
+
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password">
+        <br />
+        <input type="submit" value="Save"></form>
+    </div>
+</div>`
 }
 
 const useredit = {
@@ -301,7 +326,9 @@ const routes = [
     { path: '/theme', component: customcss },
     { path: '/edit/:id', component: episodeedit },
     { path: '/users/', component: userlist },
-    { path: '/user/:id', component: useredit }
+    { path: '/msg/:message', component: message },
+    { path: '/user/:id', component: useredit },
+    { path: '/users/new', component: usernew }
 ]
 
 const router = new VueRouter({
