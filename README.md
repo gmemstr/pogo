@@ -1,5 +1,4 @@
-![Pogo Logo](https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-small.png)
-## Podcast RSS feed generator and CMS in Go.
+## ![Pogo Logo](https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-xs.png) Podcast RSS feed generator and CMS in Go.
 
 [![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo) [![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg)](https://gitgalaxy.com) [![live branch](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg)](https://podcast.gitgalaxy.com) [![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)](https://twitter.com/gitgalaxy)
 
