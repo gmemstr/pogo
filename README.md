@@ -1,10 +1,8 @@
-<p align="center">
-<img src="https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-xs.png" alt="Pogo logo">
-</p>
-<h3 align="center">Pogo</h3>
-<p align="center">
-	Podcast RSS feed generator and CMS in Go.
-</p>
+<img src="https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
+
+## Pogo
+	
+Podcast RSS feed generator and CMS in Go.
 
 ## Getting Started
 
