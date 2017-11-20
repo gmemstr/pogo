@@ -23,13 +23,41 @@ There are a couple options for getting Pogo up and running.
 - Custom CSS themes
 - Docker support
 
+## Running
+
+1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
+2. Unzip somewhere safe
+3. [Edit the config](https://github.com/gmemstr/pogo/wiki/Configuration)
+4. Run `pogo`.
+
 ## Building
 
 ```
+# Clone the repository
 git clone https://github.com/gmemstr/pogo
+
+# Go to directory
 cd pogo
+
+# Get godep
 go get github.com/tools/godep
+
+# Install Go dependencies
 godep restore
+
+# Build
 go build
+
+# Run
 ./pogo
 ```
+
+## Credits
+
+Pogo depends on several other open source projects to function.
+
+ - [Golang](https://golang.org/)
+ - [gorilla/mux](http://github.com/gorilla/mux)
+ - [gorilla/feeds](http://github.com/gorilla/feeds)
+ - [fsnotify/fsnotify](http://github.com/fsnotify/fsnotify)
+ - [mattn/go-sqlite3](http://github.com/mattn/go-sqlite3)
