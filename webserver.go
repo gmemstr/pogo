@@ -23,6 +23,6 @@ func main() {
 	// Define routes
 	// We're live
 	r := router.Init()
-	fmt.Println("Listening on port :3000")
+	fmt.Println("Your Pogo instance is live on port :3000")
 	log.Fatal(http.ListenAndServe(":3000", r))
 }

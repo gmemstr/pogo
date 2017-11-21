@@ -118,6 +118,7 @@ const useredit = {
         <input name="id" id="id" :value="user.id" type="hidden">
         <br />
         <input type="submit" value="Save"></form>
+        <a v-bind:href="'/admin/deleteuser/'+user.id+''">Delete User</a>
     </div>
 </div>`,
     data() {

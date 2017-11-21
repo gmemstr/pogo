@@ -92,7 +92,10 @@ func Init() *mux.Router {
 		auth.RequireAuthorization(),
 		admin.AddUser(),
 	)).Methods("POST")
-
+	r.Handle("/admin/deleteuser/{id}", Handle(
+		auth.RequireAuthorization(),
+		admin.DeleteUser(),
+	)).Methods("GET")
 	r.Handle("/admin/edit", Handle(
 		auth.RequireAuthorization(),
 		admin.EditEpisode(),

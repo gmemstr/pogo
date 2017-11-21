@@ -35,12 +35,14 @@ There are a couple options for getting Pogo up and running.
 
 ## Building
 
+_Note: [This requires a valid Go enviornment setup!](https://golang.org/doc/install)_
+
 ```
-# Clone the repository
-git clone https://github.com/gmemstr/pogo
+# Go get the repository
+go get github.com/gmemstr/pogo
 
 # Go to directory
-cd pogo
+cd $GOPATH/src/github.com/gmemstr/pogo
 
 # Get godep
 go get github.com/tools/godep

@@ -18,6 +18,7 @@ import (
 	"database/sql"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/gorilla/mux"
 
 	"github.com/gmemstr/pogo/common"
 )
@@ -165,6 +166,52 @@ func EditUser() common.Handler {
 		w.Write([]byte("<script>window.location = '/admin#/users/edited';</script>"))
 		db.Close()
 
+		return nil
+	}
+}
+
+func DeleteUser() common.Handler {
+
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error opening sqlite3 file: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		statement, err := db.Prepare("DELETE FROM users WHERE id=?")
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		vars := mux.Vars(r)
+		id := vars["id"]
+		if id == "1" {
+			w.Write([]byte("<script>window.location = '/admin#/msg/Cannot%20Delete%20Admin%20User';</script>"))
+			db.Close()
+			return nil
+		}
+
+		_, err = statement.Exec(id)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
+				StatusCode: http.StatusInternalServerError,
+			}
+		}
+		w.Write([]byte("<script>window.location = '/admin#/msg/Deleted%20User';</script>"))
+		db.Close()
 		return nil
 	}
 }
