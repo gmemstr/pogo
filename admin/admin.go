@@ -31,8 +31,12 @@ type User struct {
 type UserList struct {
 	Users []User
 }
+/*
+ * The following is a set of admin commands 
+ * that the average user probably shouldn't be
+ * able to have access to, mostly user management.
+ */
 
-// Add user to the SQLite3 database
 func AddUser() common.Handler {
 
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
@@ -265,6 +269,10 @@ func ListUsers() common.Handler {
 	}
 }
 
+/*************************************
+ * End of "sensitive" admin functions
+ * ***********************************/
+
 // Write custom CSS to disk or send it back to the client if GET
 
 func CustomCss() common.Handler {
@@ -343,7 +351,7 @@ func EditEpisode() common.Handler {
 				StatusCode: http.StatusBadRequest,
 			}
 		}
-		w.Write([]byte("<script>window.location = '/admin#published';</script>"))
+		w.Write([]byte("<script>window.location = '/admin#/msg/Episode%20Published!';</script>"))
 		return nil
 	}
 }

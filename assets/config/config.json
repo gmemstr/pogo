@@ -3,6 +3,6 @@
 	"Host": "Gabriel Simmer",
 	"Email": "admin@localhost",
 	"Description": "Discussion about open source projects on the internet.",
-	"Image": "localhost:8000/assets/logo-xs.png",
-	"PodcastUrl": "http://localhost:8000"
+	"Image": "localhost:3000/assets/logo-xs.png",
+	"PodcastUrl": "http://localhost:3000"
 }
