@@ -8,7 +8,27 @@
 
 .container {} /* Basic container from styles.css */
 .title {} /* Page title */
-.adminlink {} /* Link to admin interface */
+.adminlink { /* Link to admin interface */
+	margin-left:100%;
+	display:inline-block;
+	margin-bottom: 10px;
+	background-color: #397AD6;
+	border: none;
+	color: white;
+	padding: 5px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	-webkit-transition:.52s;
+    -moz-transition: .5s;
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    transition:.5s;
+}
+.adminlink:hover {
+	background-color: #50B7D5;
+}
 
 .podcastlist {} /* Chronological podcast list */
 

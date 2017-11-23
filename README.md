@@ -1,48 +1,68 @@
-# Pogo
-## Podcast RSS feed generator and CMS in Go.
+<img src="https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
+
+## Pogo
+	
+Podcast RSS feed generator and CMS in Go.
+
+## Getting Started
+
+There are a couple options for getting Pogo up and running.
+
+- [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
+- [Clone the repo and build](#building)
+
+## Status
 
 [![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo) [![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg)](https://gitgalaxy.com) [![live branch](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg)](https://podcast.gitgalaxy.com) [![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)](https://twitter.com/gitgalaxy)
 
-## Goal
+## Features 
 
-To produce a product that is easy to deploy and easier to use when hosting a podcast from ones own servers. 
+- Automatic RSS and JSON feed generation
+- Frontend for listening and publishing episodes
+- Multiple user support
+- Custom CSS themes
+- Docker support
 
-## Features
+## Running
 
- * Auto-generate rss feed
- * Basic frontend for listening to episodes
- * Flat-file directory structure
- * Human readable files
- * Self publishing interface w/ password protection
- * Custom CSS and themeing capabilities
- * JSON feed generation for easier parsing
- * Docker support
-
-## Requirements
-
-[github.com/gmemstr/feeds](https://github.com/gmemstr/feeds) _this branch contains some fixes for "podcast specific" tags_
-
-[github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
-
-[github.com/gorilla/mux](https://github.com/gorilla/mux)
+1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
+2. Unzip somewhere safe
+3. [Edit the config](https://github.com/gmemstr/pogo/wiki/Configuration)
+4. Run `pogo`
+5. Navigate to your instance (`localhost:3000` by default)
+6. Login to the admin interface (default: **admin**, **password1**)
+7. **CHANGE YOUR PASSWORD**
 
 ## Building
 
+_Note: [This requires a valid Go enviornment setup!](https://golang.org/doc/install)_
+
 ```
+# Go get the repository
+go get github.com/gmemstr/pogo
+
+# Go to directory
+cd $GOPATH/src/github.com/gmemstr/pogo
+
+# Get godep
+go get github.com/tools/godep
+
+# Install Go dependencies
 godep restore
+
+# Build
 go build
-# Set environment variable
-export POGO_SECRET=secret
-# Windows
-# set POGO_SECRET=secret
-./podcast
+
+# Run
+./pogo
 ```
 
-## File format
+## Credits
 
-Pogo uses a flat file structure for managing podcast episodes. As such, files have a special naming convention.
+Pogo depends on several other open source projects to function.
 
-For podcast audio files, filenames take the form of YEAR-MONTH-DAY followed by the title. The two values are
-separated by underscores (`YYYY-MM-DD_TITLE.mp3`).
-
-"Shownote" files are markdown formatted and simply append `_SHOWNOTES.md` to the existing filename (sans .mp3 of course). 
+ - [Golang](https://golang.org/)
+ - [gorilla/mux](http://github.com/gorilla/mux)
+ - [gorilla/feeds](http://github.com/gorilla/feeds)
+ - [fsnotify/fsnotify](http://github.com/fsnotify/fsnotify)
+ - [mattn/go-sqlite3](http://github.com/mattn/go-sqlite3)

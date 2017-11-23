@@ -9,14 +9,15 @@
 <body>
 	<div class="container">
 	<div id="app">
-		<router-link to="/publish">Publish</router-link> <router-link to="/theme">Theme</router-link> <router-link to="/manage">Manage</router-link>
+		<nav>
+		<router-link to="/publish">Publish</router-link> <router-link to="/manage">Episodes</router-link> <router-link to="/theme">Theme</router-link> <router-link to="/users">Users</router-link></nav>
 		<h1>{{ header }}</h1>
 		<router-view></router-view>
 	</div>
+</div>
 <footer>
     <p>Pogo licensed under the GPLv3</p>
 </footer>
-</div>
 <script src="/assets/vue.js"></script>
 <script src="https://unpkg.com/vue-router@2.7.0/dist/vue-router.js"></script>
 <script src="/assets/app.js"></script>
