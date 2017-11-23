@@ -1,4 +1,4 @@
-<img src="https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
+<img src="https://cdn.rawgit.com/gmemstr/pogo/ddc9ff3a/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
 
 ## Pogo
 	
