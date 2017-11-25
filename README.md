@@ -25,6 +25,8 @@ There are a couple options for getting Pogo up and running.
 
 ## Running
 
+[![asciicast](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0.png)](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0)
+
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
 2. Unzip somewhere safe
 3. [Edit the config](https://github.com/gmemstr/pogo/wiki/Configuration)
