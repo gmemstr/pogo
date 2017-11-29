@@ -1,4 +1,4 @@
-<img src="https://cdn.rawgit.com/gmemstr/pogo/users/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
+<img src="https://cdn.rawgit.com/gmemstr/pogo/ddc9ff3a/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
 
 ## Pogo
 	
@@ -24,6 +24,8 @@ There are a couple options for getting Pogo up and running.
 - Docker support
 
 ## Running
+
+[![asciicast](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0.png)](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0)
 
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
 2. Unzip somewhere safe

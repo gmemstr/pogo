@@ -120,8 +120,8 @@ func GenerateRss() {
 					Created:     date,
 				},
 			)
-		}
 		i = i + 1;
+		}
 	}
 
 	// Translate the feed to both RSS and JSON,
