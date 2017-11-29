@@ -7,32 +7,34 @@
 package admin
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
-	"database/sql"
 
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/gmemstr/pogo/common"
 )
+
 type User struct {
-	Id 	  int `json:"id"`
-	Dbun  string `json:"username"`
-	Dbrn  string `json:"realname"`
-	Dbem  string `json:"email"`
+	Id   int    `json:"id"`
+	Dbun string `json:"username"`
+	Dbrn string `json:"realname"`
+	Dbem string `json:"email"`
 }
 type UserList struct {
 	Users []User
 }
+
 /*
- * The following is a set of admin commands 
+ * The following is a set of admin commands
  * that the average user probably shouldn't be
  * able to have access to, mostly user management.
  */
@@ -71,7 +73,7 @@ func AddUser() common.Handler {
 
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 
-		_, err = statement.Exec(username,hash,realname,email)
+		_, err = statement.Exec(username, hash, realname, email)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
@@ -145,7 +147,7 @@ func EditUser() common.Handler {
 					Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
 					StatusCode: http.StatusInternalServerError,
 				}
-			}	
+			}
 		}
 		fmt.Println(hash)
 		if bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) != nil {
@@ -158,9 +160,9 @@ func EditUser() common.Handler {
 
 		if newpassword != "" {
 			pwhash, err = bcrypt.GenerateFromPassword([]byte(newpassword), 4)
-		} 
+		}
 
-		_, err = statement.Exec(username,pwhash,realname,email,id)
+		_, err = statement.Exec(username, pwhash, realname, email, id)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
@@ -328,15 +330,15 @@ func EditEpisode() common.Handler {
 		fmt.Println(filename)
 		description := strings.Join(r.Form["description"], "")
 
-		if ("./podcasts" + PreviousFilename + ".mp3" != filename) {
-			err = os.Rename("./podcasts/" + PreviousFilename + ".mp3", filename)
+		if "./podcasts"+PreviousFilename+".mp3" != filename {
+			err = os.Rename("./podcasts/"+PreviousFilename+".mp3", filename)
 			if err != nil {
 				return &common.HTTPError{
 					Message:    err.Error(),
 					StatusCode: http.StatusBadRequest,
 				}
 			}
-			err = os.Rename("./podcasts/" + PreviousFilename + "_SHOWNOTES.md", shownotes)
+			err = os.Rename("./podcasts/"+PreviousFilename+"_SHOWNOTES.md", shownotes)
 			if err != nil {
 				return &common.HTTPError{
 					Message:    err.Error(),

@@ -6,6 +6,7 @@ import (
 	"crypto/hmac"
 	"crypto/rand"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
@@ -13,8 +14,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"os"
+	"strings"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/gmemstr/pogo/common"
 )
@@ -27,7 +30,39 @@ const (
 	cookieExpiry = 60 * 60 * 24 * 30 // 30 days in seconds
 )
 
-func RequireAuthorization() common.Handler {
+func UserPermissions(username string, permission int) (bool, error) {
+
+	db, err := sql.Open("sqlite3", "assets/config/users.db")
+	defer db.Close()
+	isAllowed := false
+	if err != nil {
+		return isAllowed, err
+	}
+
+	statement, err := db.Prepare("SELECT permissions FROM users WHERE username=?")
+	if err != nil {
+		return isAllowed, err
+	}
+
+	rows, err := statement.Query(username)
+	if err != nil {
+		return isAllowed, err
+	}
+
+	var level int
+	for rows.Next() {
+		err = rows.Scan(&level)
+		if err != nil {
+			return isAllowed, err
+		}
+		if level >= permission {
+			isAllowed = true
+		}
+	}
+	return isAllowed, nil
+}
+
+func RequireAuthorization(permission int) common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 		usr, err := DecryptCookie(r)
 		if err != nil {
@@ -46,6 +81,17 @@ func RequireAuthorization() common.Handler {
 		}
 
 		rc.User = usr
+
+		username := rc.User.Username
+
+		hasPermission, err := UserPermissions(string(username), permission)
+
+		if !hasPermission {
+			return &common.HTTPError{
+				Message:    "Unauthorized! Redirecting to /admin",
+				StatusCode: http.StatusUnauthorized,
+			}
+		}
 		return nil
 	}
 }
