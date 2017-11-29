@@ -205,6 +205,7 @@ const episodemanagement = {
                 } else {
                     var t = JSON.parse(items).items
                     for (var i = t.length - 1; i >= 0; i--) {
+                        console.log(i) 
                         this.items.push({
                             title: t[i].title,
                             url: t[i].url,
@@ -312,10 +313,14 @@ const customcss = {
 
             get("/admin/css", (err, css) => {
                 this.loading = false
-                if (err) {
-                    this.error = err.toString()
+                if (css == "{}") {
+                    this.css = "You aren't allowed to edit this CSS!"
                 } else {
-                    this.css = css
+                    if (err) {
+                        this.error = err.toString()
+                    } else {
+                        this.css = css
+                    }
                 }
             })
         }
@@ -348,8 +353,13 @@ const app = new Vue({
 function get(url,callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(null, xmlHttp.responseText)
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            if (xmlHttp.responseText == "Unauthorized") {
+                callback(null, "{}")
+            } else {
+                callback(null, xmlHttp.responseText)
+            }
+        }
     }
     xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
