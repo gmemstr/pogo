@@ -97,22 +97,22 @@ func Init() *mux.Router {
 		admin.DeleteUser(),
 	)).Methods("GET")
 	r.Handle("/admin/edit", Handle(
-		auth.RequireAuthorization(0),
+		auth.RequireAuthorization(1),
 		admin.EditEpisode(),
 	)).Methods("POST")
 
 	r.Handle("/admin/delete", Handle(
-		auth.RequireAuthorization(0),
+		auth.RequireAuthorization(1),
 		admin.RemoveEpisode(),
 	)).Methods("GET")
 
 	r.Handle("/admin/css", Handle(
-		auth.RequireAuthorization(2),
+		auth.RequireAuthorization(1),
 		admin.CustomCss(),
 	)).Methods("GET", "POST")
 
 	r.Handle("/admin/adduser", Handle(
-		auth.RequireAuthorization(1),
+		auth.RequireAuthorization(2),
 		admin.AddUser(),
 	)).Methods("POST")
 

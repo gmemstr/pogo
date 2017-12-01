@@ -50,7 +50,7 @@ func AddUser() common.Handler {
 				StatusCode: http.StatusInternalServerError,
 			}
 		}
-		statement, err := db.Prepare("INSERT INTO users(username,hash,realname,email) VALUES (?,?,?,?)")
+		statement, err := db.Prepare("INSERT INTO users(username,hash,realname,email,permissions) VALUES (?,?,?,?,?)")
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
@@ -70,10 +70,11 @@ func AddUser() common.Handler {
 		password := strings.Join(r.Form["password"], "")
 		realname := strings.Join(r.Form["realname"], "")
 		email := strings.Join(r.Form["email"], "")
+		permissions := strings.Join(r.Form["permissions"], "")
 
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 
-		_, err = statement.Exec(username, hash, realname, email)
+		_, err = statement.Exec(username, hash, realname, email, permissions)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
@@ -112,9 +113,10 @@ func EditUser() common.Handler {
 		newpassword := strings.Join(r.Form["newpw1"], "")
 		realname := strings.Join(r.Form["realname"], "")
 		email := strings.Join(r.Form["email"], "")
+		permissions := strings.Join(r.Form["permissions"], "")
 		pwhash, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 
-		statement, err := db.Prepare("UPDATE users SET username=?, hash=?, realname=?, email=? WHERE id=?")
+		statement, err := db.Prepare("UPDATE users SET username=?, hash=?, realname=?, email=?, permissions=? WHERE id=?")
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error preparing sqlite3 statement: %v", err),
@@ -162,7 +164,7 @@ func EditUser() common.Handler {
 			pwhash, err = bcrypt.GenerateFromPassword([]byte(newpassword), 4)
 		}
 
-		_, err = statement.Exec(username, pwhash, realname, email, id)
+		_, err = statement.Exec(username, pwhash, realname, email, id, permissions)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    fmt.Sprintf("error executing sqlite3 statement: %v", err),
