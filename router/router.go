@@ -1,21 +1,21 @@
 package router
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
-	"golang.org/x/crypto/bcrypt"
-	"database/sql"
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/gorilla/mux"
 	"github.com/gmemstr/pogo/admin"
 	"github.com/gmemstr/pogo/auth"
 	"github.com/gmemstr/pogo/common"
+	"github.com/gorilla/mux"
 )
 
 type NewConfig struct {
@@ -70,7 +70,7 @@ func Init() *mux.Router {
 	// Authenticated endpoints should be passed to BasicAuth()
 	// first
 	r.Handle("/admin", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(0),
 		adminHandler(),
 	)).Methods("GET", "POST")
 
@@ -79,45 +79,45 @@ func Init() *mux.Router {
 	)).Methods("GET", "POST")
 
 	r.Handle("/admin/publish", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(0),
 		admin.CreateEpisode(),
 	)).Methods("POST")
 
 	r.Handle("/admin/edituser", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(2),
 		admin.EditUser(),
 	)).Methods("POST")
 
 	r.Handle("/admin/newuser", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(2),
 		admin.AddUser(),
 	)).Methods("POST")
 	r.Handle("/admin/deleteuser/{id}", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(2),
 		admin.DeleteUser(),
 	)).Methods("GET")
 	r.Handle("/admin/edit", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(1),
 		admin.EditEpisode(),
 	)).Methods("POST")
 
 	r.Handle("/admin/delete", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(1),
 		admin.RemoveEpisode(),
 	)).Methods("GET")
 
 	r.Handle("/admin/css", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(1),
 		admin.CustomCss(),
 	)).Methods("GET", "POST")
 
 	r.Handle("/admin/adduser", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(2),
 		admin.AddUser(),
 	)).Methods("POST")
 
 	r.Handle("/admin/listusers", Handle(
-		auth.RequireAuthorization(),
+		auth.RequireAuthorization(1),
 		admin.ListUsers(),
 	)).Methods("GET")
 
@@ -169,13 +169,14 @@ func loginHandler() common.Handler {
 				StatusCode: http.StatusBadRequest,
 			}
 		}
-		var id 	  int
-		var dbun  string
+		var id int
+		var dbun string
 		var dbhsh string
-		var dbrn  string
-		var dbem  string
+		var dbrn string
+		var dbem string
+		var dbperm int
 		for rows.Next() {
-			err := rows.Scan(&id,&dbun,&dbhsh,&dbrn,&dbem)
+			err := rows.Scan(&id, &dbun, &dbhsh, &dbrn, &dbem, &dbperm)
 			if err != nil {
 				return &common.HTTPError{
 					Message:    fmt.Sprintf("error in decoding sql data", err),
@@ -186,7 +187,7 @@ func loginHandler() common.Handler {
 		}
 		// Create a cookie here because the credentials are correct
 		if dbun == username && bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
-		c, err := auth.CreateSession(&common.User{
+			c, err := auth.CreateSession(&common.User{
 				Username: username,
 			})
 			if err != nil {
@@ -203,7 +204,6 @@ func loginHandler() common.Handler {
 			db.Close()
 			return nil
 		}
-
 
 		return &common.HTTPError{
 			Message:    "Invalid credentials!",
