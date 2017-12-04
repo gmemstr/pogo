@@ -2,13 +2,10 @@ package router
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 
