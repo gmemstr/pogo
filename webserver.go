@@ -22,7 +22,7 @@ func main() {
 
 	if _, err := os.Stat("run.lockfile"); os.IsNotExist(err) {
 		fmt.Println("This looks like your first time running Pogo,\ngive me a second to set myself up.")
-		setup()
+		Setup()
 	}
 
 	// Start the watch() function in generate_rss.go, which
