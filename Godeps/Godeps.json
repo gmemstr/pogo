@@ -9,6 +9,14 @@
 			"Rev": "4da3e2cfbabc9f751898f250b49f2439785783a1"
 		},
 		{
+			"ImportPath": "github.com/google/go-github/github",
+			"Rev": "fbfee053c26dab3772adfc7799d995eed379133e"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Rev": "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+		},
+		{
 			"ImportPath": "github.com/gorilla/feeds",
 			"Comment": "v1.0.0",
 			"Rev": "4b936b5221c53c99fcd4b15ac0b8c38ff490ab89"
