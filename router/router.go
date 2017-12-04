@@ -122,10 +122,6 @@ func Init() *mux.Router {
 		admin.ListUsers(),
 	)).Methods("GET")
 
-	r.Handle("/setup", Handle(
-		serveSetup(),
-	)).Methods("GET", "POST")
-
 	return r
 }
 
@@ -242,34 +238,5 @@ func rootHandler() common.Handler {
 func adminHandler() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 		return common.ReadAndServeFile("assets/web/admin.html", w)
-	}
-}
-
-// Serve setup.html and config parameters
-func serveSetup() common.Handler {
-	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
-		if r.Method == "GET" {
-			return common.ReadAndServeFile("assets/web/setup.html", w)
-		}
-		r.ParseMultipartForm(32 << 20)
-
-		// Parse form and convert to JSON
-		cnf := NewConfig{
-			strings.Join(r.Form["podcastname"], ""),  // Podcast name
-			strings.Join(r.Form["podcasthost"], ""),  // Podcast host
-			strings.Join(r.Form["podcastemail"], ""), // Podcast host email
-			"", // Podcast image
-			"", // Podcast location
-			"", // Podcast location
-		}
-
-		b, err := json.Marshal(cnf)
-		if err != nil {
-			panic(err)
-		}
-
-		ioutil.WriteFile("assets/config/config.json", b, 0644)
-		w.Write([]byte("Done"))
-		return nil
 	}
 }
