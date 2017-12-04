@@ -98,7 +98,7 @@ hr {
 	font-family: Monospace;
 }
 
-input[type=text], input[type=date], input[type=file], input[type=password],textarea {
+input[type=text], input[type=date], input[type=file], input[type=password],textarea, select {
 	padding:10px;
 	border-radius: 4px;
 	box-sizing: border-box;
