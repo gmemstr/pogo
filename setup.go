@@ -20,6 +20,7 @@ func Setup() {
 	fmt.Println("Initializing the database")
 
 	os.MkdirAll("assets/config/", 0755)
+	os.Mkdir("podcasts", 0755)
 	os.Create("assets/config/users.db")
 
 	db, err := sql.Open("sqlite3", "assets/config/users.db")
