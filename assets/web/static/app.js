@@ -121,6 +121,13 @@ const useredit = {
         <input type="password" id="newpw2" name="newpw2">
         <label for="oldpw">Old Password</label>
         <input type="password" id="oldpw" name="oldpw">
+        <br/><br/>
+        <select name="permissions">
+            <option value="0">Publishing only</option>
+            <option value="1">Publishing and Episode Management</option>
+            <option value="2">Publishing, Episode and User management</option>
+        </select>
+
         <input name="id" id="id" :value="user.id" type="hidden">
         <br /><br />
         <input type="submit" class="button" value="Save" class="button"></form>

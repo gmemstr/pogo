@@ -67,8 +67,9 @@ func Init() *mux.Router {
 		rootHandler(),
 	)).Methods("GET")
 
-	// Authenticated endpoints should be passed to BasicAuth()
-	// first
+	// RequireAuthorization() handles authentication
+	// and takes a single argument for permission level.
+	// 0 any user, 1 most users, 2 only admin users
 	r.Handle("/admin", Handle(
 		auth.RequireAuthorization(0),
 		adminHandler(),
