@@ -157,9 +157,9 @@ func loginHandler() common.Handler {
 		password := r.Form.Get("password")
 		rows, err := statement.Query(username)
 
-		if username == "" || password == "" {
+		if username == "" || password == "" || err != nil {
 			return &common.HTTPError{
-				Message:    "username or password is empty",
+				Message:    "username or password is invalid",
 				StatusCode: http.StatusBadRequest,
 			}
 		}
@@ -180,7 +180,7 @@ func loginHandler() common.Handler {
 
 		}
 		// Create a cookie here because the credentials are correct
-		if dbun == username && bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
+		if bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
 			c, err := auth.CreateSession(&common.User{
 				Username: username,
 			})

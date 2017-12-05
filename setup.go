@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/go-github/github"
 )
@@ -38,13 +39,21 @@ func Setup() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Administrator password: ")
 	text, err := reader.ReadString('\n')
+	text = strings.Replace(text, "\n", "", -1)
+	if err != nil {
+		fmt.Sprintf("Problem reading password input! %v", err)
+	}
+	fmt.Println(text)
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(text), 8)
-
-	q, err := db.Prepare("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,`admin`,?,`Administrator`,`admin@localhost`,2")
-	q.Exec(hash)
-
-	db.Close()
+	hash, err := bcrypt.GenerateFromPassword([]byte(text), 4)
+	if bcrypt.CompareHashAndPassword(hash, []byte(text)) == nil {
+		fmt.Println("Password hashed")
+	}
+	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,'admin',?,'Administrator','admin@localhost',2)", hash)
+	if err != nil {
+		fmt.Sprintf("Problem creating database! %v", err)
+	}
+	defer db.Close()
 
 	// Download web assets
 	fmt.Println("Downloading web assets")
