@@ -41,7 +41,7 @@ func Setup() {
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(text), 8)
 
-	q, err = db.Prepare("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,`admin`,?,`Administrator`,`admin@localhost`,2")
+	q, err := db.Prepare("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,`admin`,?,`Administrator`,`admin@localhost`,2")
 	q.Exec(hash)
 
 	db.Close()
