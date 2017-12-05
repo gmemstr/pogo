@@ -2,10 +2,12 @@ package main
 
 import (
 	"archive/zip"
+	"bufio"
 	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"net/http"
 	"os"
@@ -32,6 +34,14 @@ func Setup() {
 	if err != nil {
 		fmt.Sprintf("Problem creating database! %v", err)
 	}
+	// Insert default admin user
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Administrator password: ")
+	text, err := reader.ReadString('\n')
+
+	hash, err := bcrypt.GenerateFromPassword(text)
+
+	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,`admin`,?,`Administrator`,`admin@localhost`,2", hash)
 
 	db.Close()
 
@@ -79,11 +89,11 @@ func Setup() {
 }
 
 func LockFile() {
-	lock, err := os.Create("run.lockfile")
+	lock, err := os.Create(".lock")
 	if err != nil {
 		fmt.Println("Error: %v", err)
 	}
-	lock.Write([]byte("# You can leave this file emtpy, it simply tells Pogo you're set up!"))
+	lock.Write([]byte("This file left intentionally empty"))
 	defer lock.Close()
 }
 

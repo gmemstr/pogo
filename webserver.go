@@ -15,12 +15,16 @@ import (
 	"github.com/gmemstr/pogo/router"
 )
 
+func GetPogoVersion() {
+	return "2.0.0"
+}
+
 // Main function that defines routes
 func main() {
+
 	// Check if this is the first time Pogo has been run
 	// with a lockfile
-
-	if _, err := os.Stat("run.lockfile"); os.IsNotExist(err) {
+	if _, err := os.Stat(".lock"); os.IsNotExist(err) {
 		fmt.Println("This looks like your first time running Pogo,\ngive me a second to set myself up.")
 		Setup()
 	}
