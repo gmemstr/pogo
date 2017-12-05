@@ -15,10 +15,6 @@ import (
 	"github.com/gmemstr/pogo/router"
 )
 
-func GetPogoVersion() {
-	return "2.0.0"
-}
-
 // Main function that defines routes
 func main() {
 

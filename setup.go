@@ -39,7 +39,7 @@ func Setup() {
 	fmt.Print("Administrator password: ")
 	text, err := reader.ReadString('\n')
 
-	hash, err := bcrypt.GenerateFromPassword(text)
+	hash, err := bcrypt.GenerateFromPassword(text, 8)
 
 	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,`admin`,?,`Administrator`,`admin@localhost`,2", hash)
 
