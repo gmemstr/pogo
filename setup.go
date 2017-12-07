@@ -2,20 +2,29 @@ package main
 
 import (
 	"archive/zip"
-	"bufio"
 	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 	"io"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/google/go-github/github"
 )
+
+func RandomString(n int) string {
+	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]")
+
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letter[rand.Intn(len(letter))]
+	}
+	return string(b)
+}
 
 func Setup() {
 	defer LockFile()
@@ -28,30 +37,26 @@ func Setup() {
 
 	db, err := sql.Open("sqlite3", "assets/config/users.db")
 	if err != nil {
-		fmt.Sprintf("Problem opening database file! %v", err)
+		fmt.Println("Problem opening database file! %v", err)
 	}
 
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS `users` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `username` TEXT UNIQUE, `hash` TEXT, `realname` TEXT, `email` TEXT, `permissions` INTEGER )")
 	if err != nil {
-		fmt.Sprintf("Problem creating database! %v", err)
+		fmt.Println("Problem creating database! %v", err)
 	}
-	// Insert default admin user
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Administrator password: ")
-	text, err := reader.ReadString('\n')
-	text = strings.Replace(text, "\n", "", -1)
-	if err != nil {
-		fmt.Sprintf("Problem reading password input! %v", err)
-	}
-	fmt.Println(text)
 
+	text := RandomString(14)
+	fmt.Println("Admin password: ", text)
 	hash, err := bcrypt.GenerateFromPassword([]byte(text), 4)
+	if err != nil {
+		fmt.Println("Error generating hash", err)
+	}
 	if bcrypt.CompareHashAndPassword(hash, []byte(text)) == nil {
 		fmt.Println("Password hashed")
 	}
-	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,'admin',?,'Administrator','admin@localhost',2)", hash)
+	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,'admin','" + string(hash) + "','Administrator','admin@localhost',2)")
 	if err != nil {
-		fmt.Sprintf("Problem creating database! %v", err)
+		fmt.Println("Problem creating database! %v", err)
 	}
 	defer db.Close()
 
@@ -64,29 +69,29 @@ func Setup() {
 	ctx := context.Background()
 	res, _, err := client.GetLatestRelease(ctx, "gmemstr", "pogo")
 	if err != nil {
-		fmt.Sprintf("Problem creating database! %v", err)
+		fmt.Println("Problem creating database! %v", err)
 	}
 	for i := 0; i < len(res.Assets); i++ {
 		if res.Assets[i].GetName() == "webassets.zip" {
 			download := res.Assets[i]
-			fmt.Sprintf("Release found: %v", download.GetBrowserDownloadURL())
+			fmt.Println("Release found: %v", download.GetBrowserDownloadURL())
 			tmpfile, err := os.Create(download.GetName())
 			if err != nil {
-				fmt.Sprintf("Problem creating webassets file! %v", err)
+				fmt.Println("Problem creating webassets file! %v", err)
 			}
 			var j io.Reader = (*os.File)(tmpfile)
 			defer tmpfile.Close()
 
 			j, s, err := client.DownloadReleaseAsset(ctx, "gmemstr", "pogo", download.GetID())
 			if err != nil {
-				fmt.Sprintf("Problem downloading webassets! %v", err)
+				fmt.Println("Problem downloading webassets! %v", err)
 			}
 			if j == nil {
 				resp, err := http.Get(s)
 				defer resp.Body.Close()
 				_, err = io.Copy(tmpfile, resp.Body)
 				if err != nil {
-					fmt.Sprintf("Problem creating webassets file! %v", err)
+					fmt.Println("Problem creating webassets file! %v", err)
 				}
 				fmt.Println("Download complete\nUnzipping")
 				err = Unzip(download.GetName(), "assets/web")
