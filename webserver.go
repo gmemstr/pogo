@@ -21,7 +21,7 @@ func main() {
 	// Check if this is the first time Pogo has been run
 	// with a lockfile
 	if _, err := os.Stat(".lock"); os.IsNotExist(err) {
-		fmt.Println("This looks like your first time running Pogo,\ngive me a second to set myself up.")
+		fmt.Println("This looks like your first time running Pogo, give me a second to set myself up.")
 		Setup()
 	}
 
