@@ -67,7 +67,7 @@ func Setup() {
 	client := github.NewClient(nil).Repositories
 
 	ctx := context.Background()
-	res, _, err := client.GetLatestRelease(ctx, "gmemstr", "pogo")
+	res, _, err := client.GetLatestRelease(ctx, "gmemstr", "pogo-vue")
 	if err != nil {
 		fmt.Println("Problem creating database! %v", err)
 	}
@@ -82,7 +82,7 @@ func Setup() {
 			var j io.Reader = (*os.File)(tmpfile)
 			defer tmpfile.Close()
 
-			j, s, err := client.DownloadReleaseAsset(ctx, "gmemstr", "pogo", download.GetID())
+			j, s, err := client.DownloadReleaseAsset(ctx, "gmemstr", "pogo-vue", download.GetID())
 			if err != nil {
 				fmt.Println("Problem downloading webassets! %v", err)
 			}
