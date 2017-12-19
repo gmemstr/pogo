@@ -19,10 +19,9 @@ ADD . $GOPATH/src/github.com/gmemstr/pogo
 # 4. List directory structure (for debugging really)\
 # 5. Make empty podcast direcory
 # 6. Create empty feed files
-RUN ls -al && go get github.com/tools/godep && \
+RUN go get github.com/tools/godep && \
 	godep restore && \
 	go build -o pogoapp && chmod +x pogoapp && \
-	ls -al && \
 	mkdir podcasts && \
 	touch assets/web/feed.rss assets/web/feed.json && \
 	echo '{}' >assets/web/feed.json && \
