@@ -3,12 +3,13 @@ package main
 import (
 	"archive/zip"
 	"context"
+	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 	"io"
-	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,14 +17,21 @@ import (
 	"github.com/google/go-github/github"
 )
 
-func RandomString(n int) string {
-	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-={}[]")
-
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letter[rand.Intn(len(letter))]
+func GenerateRandomBytes(n int) ([]byte, error) {
+	b := make([]byte, n)
+	_, err := rand.Read(b)
+	if err != nil {
+		return nil, err
 	}
-	return string(b)
+
+	return b, nil
+}
+
+// GenerateRandomString returns a URL-safe, base64 encoded
+// securely generated random string.
+func GenerateRandomString(s int) (string, error) {
+	b, err := GenerateRandomBytes(s)
+	return base64.URLEncoding.EncodeToString(b), err
 }
 
 func Setup() {
@@ -45,7 +53,10 @@ func Setup() {
 		fmt.Println("Problem creating database! %v", err)
 	}
 
-	text := RandomString(14)
+	text, err := GenerateRandomString(12)
+	if err != nil {
+		fmt.Println("Error randomly generating password", err)
+	}
 	fmt.Println("Admin password: ", text)
 	hash, err := bcrypt.GenerateFromPassword([]byte(text), 4)
 	if err != nil {
@@ -69,7 +80,7 @@ func Setup() {
 	ctx := context.Background()
 	res, _, err := client.GetLatestRelease(ctx, "gmemstr", "pogo-vue")
 	if err != nil {
-		fmt.Println("Problem creating database! %v", err)
+		fmt.Println("Problem getting latest pogo-vue release! %v", err)
 	}
 	for i := 0; i < len(res.Assets); i++ {
 		if res.Assets[i].GetName() == "webassets.zip" {
