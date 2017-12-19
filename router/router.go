@@ -2,13 +2,10 @@ package router
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 
@@ -52,6 +49,7 @@ func Init() *mux.Router {
 
 	// "Static" paths
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/web/static"))))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("assets/web/static"))))
 	r.PathPrefix("/download/").Handler(http.StripPrefix("/download/", http.FileServer(http.Dir("podcasts"))))
 
 	// Paths that require specific handlers
@@ -122,10 +120,6 @@ func Init() *mux.Router {
 		admin.ListUsers(),
 	)).Methods("GET")
 
-	r.Handle("/setup", Handle(
-		serveSetup(),
-	)).Methods("GET", "POST")
-
 	return r
 }
 
@@ -164,9 +158,9 @@ func loginHandler() common.Handler {
 		password := r.Form.Get("password")
 		rows, err := statement.Query(username)
 
-		if username == "" || password == "" {
+		if username == "" || password == "" || err != nil {
 			return &common.HTTPError{
-				Message:    "username or password is empty",
+				Message:    "username or password is invalid",
 				StatusCode: http.StatusBadRequest,
 			}
 		}
@@ -187,7 +181,7 @@ func loginHandler() common.Handler {
 
 		}
 		// Create a cookie here because the credentials are correct
-		if dbun == username && bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
+		if bcrypt.CompareHashAndPassword([]byte(dbhsh), []byte(password)) == nil {
 			c, err := auth.CreateSession(&common.User{
 				Username: username,
 			})
@@ -242,34 +236,5 @@ func rootHandler() common.Handler {
 func adminHandler() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
 		return common.ReadAndServeFile("assets/web/admin.html", w)
-	}
-}
-
-// Serve setup.html and config parameters
-func serveSetup() common.Handler {
-	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
-		if r.Method == "GET" {
-			return common.ReadAndServeFile("assets/web/setup.html", w)
-		}
-		r.ParseMultipartForm(32 << 20)
-
-		// Parse form and convert to JSON
-		cnf := NewConfig{
-			strings.Join(r.Form["podcastname"], ""),  // Podcast name
-			strings.Join(r.Form["podcasthost"], ""),  // Podcast host
-			strings.Join(r.Form["podcastemail"], ""), // Podcast host email
-			"", // Podcast image
-			"", // Podcast location
-			"", // Podcast location
-		}
-
-		b, err := json.Marshal(cnf)
-		if err != nil {
-			panic(err)
-		}
-
-		ioutil.WriteFile("assets/config/config.json", b, 0644)
-		w.Write([]byte("Done"))
-		return nil
 	}
 }

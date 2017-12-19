@@ -8,7 +8,7 @@ Podcast RSS feed generator and CMS in Go.
 
 There are a couple options for getting Pogo up and running.
 
-- [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
+- [Download the latest release](#running)
 - [Clone the repo and build](#building)
 
 ## Status
@@ -29,11 +29,10 @@ There are a couple options for getting Pogo up and running.
 
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
 2. Unzip somewhere safe
-3. [Edit the config](https://github.com/gmemstr/pogo/wiki/Configuration)
+3. [Edit the configuration](https://github.com/gmemstr/pogo/wiki/Configuration)
 4. Run `pogo`
 5. Navigate to your instance (`localhost:3000` by default)
-6. Login to the admin interface (default: **admin**, **password1**)
-7. **CHANGE YOUR PASSWORD**
+6. Login to the admin interface (your credentials are generated on the first run)
 
 ## Building
 

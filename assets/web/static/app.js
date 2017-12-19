@@ -377,3 +377,8 @@ function get(url,callback) {
     xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
 }
+
+function logout() {
+    document.cookie = "POGO_SESSION=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    window.location = "/";
+}
