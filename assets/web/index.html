@@ -35,7 +35,7 @@
 get("/json", function(data){
     json = JSON.parse(data);
     document.title = json.title;
-    document.getElementById("title").innerHTML = json.title;
+    document.getElementById("title").innerHTML = json.title + " DEVELOPMENT MODE";
 
     // Iterate through JSON 
     for (i=0;i<json.items.length; i++){
