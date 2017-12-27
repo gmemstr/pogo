@@ -75,7 +75,7 @@ func Init() *mux.Router {
 
 	r.Handle("/login", Handle(
 		loginHandler(),
-	)).Methods("GET", "POST")
+	)).Methods("POST")
 
 	r.Handle("/admin/publish", Handle(
 		auth.RequireAuthorization(0),
@@ -139,11 +139,6 @@ func loginHandler() common.Handler {
 		if _, err := auth.DecryptCookie(r); err == nil {
 			http.Redirect(w, r, "/admin", http.StatusTemporaryRedirect)
 			return nil
-		}
-
-		if r.Method == "GET" {
-			w.Header().Set("Content-Type", "text/html")
-			return common.ReadAndServeFile("assets/web/login.html", w)
 		}
 
 		err = r.ParseForm()
