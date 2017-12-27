@@ -35,6 +35,7 @@ func GenerateRandomString(s int) (string, error) {
 }
 
 func Setup() {
+	go GenerateRss()
 	defer LockFile()
 	// Create users SQLite3 file
 	fmt.Println("Initializing the database")
