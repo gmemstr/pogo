@@ -8,13 +8,15 @@
 package main
 
 import (
+	"bufio"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
+	"os"
 	"strconv"
+	"strings"
 	"time"
-	"encoding/json"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/feeds"
@@ -66,7 +68,7 @@ func watch() {
 }
 
 // Iterate through podcasts directory and build feed
-// object, then compile as json and rss and write to file 
+// object, then compile as json and rss and write to file
 func GenerateRss() {
 	d, err := ioutil.ReadFile("assets/config/config.json")
 	if err != nil {
@@ -99,7 +101,9 @@ func GenerateRss() {
 			s := strings.Split(file.Name(), "_")
 			t := strings.Split(s[1], ".")
 			title := t[0]
-			description, err := ioutil.ReadFile("podcasts/" + strings.Replace(file.Name(), ".mp3", "_SHOWNOTES.md", 2))
+			descfilelines := File2lines("podcasts/" + strings.Replace(file.Name(), ".mp3", "_SHOWNOTES.md", 2))
+			author := descfilelines[0]
+			description := descfilelines[1]
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -111,16 +115,16 @@ func GenerateRss() {
 			link := podcasturl + "/download/" + file.Name()
 			feed.Add(
 				&feeds.Item{
-					Id:			 strconv.Itoa(i),
+					Id:          strconv.Itoa(i),
 					Title:       title,
 					Link:        &feeds.Link{Href: link, Length: size, Type: "audio/mpeg"},
 					Enclosure:   &feeds.Enclosure{Url: link, Length: size, Type: "audio/mpeg"},
-					Description: string(description),
-					Author:      &feeds.Author{Name: config.Host, Email: config.Email},
+					Description: description,
+					Author:      &feeds.Author{Name: author, Email: config.Email}, // Replace with author in shownotes
 					Created:     date,
 				},
 			)
-		i = i + 1;
+			i = i + 1
 		}
 	}
 
@@ -142,4 +146,24 @@ func GenerateRss() {
 
 	json_byte := []byte(json)
 	ioutil.WriteFile("assets/web/feed.json", json_byte, 0644)
+}
+
+// From https://siongui.github.io/2016/04/06/go-readlines-from-file-or-string/
+func File2lines(filePath string) []string {
+	f, err := os.Open(filePath)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+
+	return lines
 }

@@ -32,6 +32,14 @@ type User struct {
 type UserList struct {
 	Users []User
 }
+type Config struct {
+	Name        string
+	Host        string
+	Email       string
+	Description string
+	Image       string
+	PodcastUrl  string
+}
 
 /*
  * The following is a set of admin commands
@@ -362,7 +370,16 @@ func EditEpisode() common.Handler {
 
 func CreateEpisode() common.Handler {
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
-		err := r.ParseMultipartForm(32 << 20)
+		d, err := ioutil.ReadFile("assets/config/config.json")
+		if err != nil {
+			panic(err)
+		}
+		var config Config
+		err = json.Unmarshal(d, &config)
+		if err != nil {
+			panic(err)
+		}
+		err = r.ParseMultipartForm(32 << 20)
 		if err != nil {
 			return &common.HTTPError{
 				Message:    err.Error(),
@@ -373,11 +390,36 @@ func CreateEpisode() common.Handler {
 		// Build filename for episode
 		date := strings.Join(r.Form["date"], "")
 		title := strings.Join(r.Form["title"], "")
+		db, err := sql.Open("sqlite3", "assets/config/users.db")
+		defer db.Close()
+		author := config.Host
 
+		if err != nil {
+			fmt.Println("Error getting user from database", err)
+		}
+
+		statement, err := db.Prepare("SELECT realname FROM users WHERE username=?")
+		if err != nil {
+			fmt.Println("Error getting user from database", err)
+		}
+
+		rows, err := statement.Query(rc.User.Username)
+		if err != nil {
+			fmt.Println("Error getting user from database", err)
+		}
+
+		var realname string
+		for rows.Next() {
+			err = rows.Scan(&realname)
+			if err != nil {
+				fmt.Println("Error getting user from database", err)
+			}
+			author = realname
+		}
 		name := fmt.Sprintf("%v_%v", date, title)
 		filename := name + ".mp3"
 		shownotes := name + "_SHOWNOTES.md"
-		description := strings.Join(r.Form["description"], "")
+		description := author + "\n" + strings.Join(r.Form["description"], "")
 		// Finish building filenames
 
 		err = ioutil.WriteFile("./podcasts/"+shownotes, []byte(description), 0644)
