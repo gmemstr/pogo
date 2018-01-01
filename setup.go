@@ -6,10 +6,12 @@ import (
 	"crypto/rand"
 	"database/sql"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -17,62 +19,37 @@ import (
 	"github.com/google/go-github/github"
 )
 
-func GenerateRandomBytes(n int) ([]byte, error) {
-	b := make([]byte, n)
-	_, err := rand.Read(b)
-	if err != nil {
-		return nil, err
-	}
-
-	return b, nil
-}
-
-// GenerateRandomString returns a URL-safe, base64 encoded
-// securely generated random string.
-func GenerateRandomString(s int) (string, error) {
-	b, err := GenerateRandomBytes(s)
-	return base64.URLEncoding.EncodeToString(b), err
+type Configuration struct {
+	Name        string `json:"Name"`
+	Host        string `json:"Host"`
+	Email       string `json:"Email"`
+	Description string `json:"Description"`
+	Image       string `json:"Image"`
+	PodcastUrl  string `json:"PodcastUrl"`
 }
 
 func Setup() {
-	go GenerateRss()
-	defer LockFile()
-	// Create users SQLite3 file
-	fmt.Println("Initializing the database")
-
+	// Create directories
 	os.MkdirAll("assets/config/", 0755)
 	os.Mkdir("podcasts", 0755)
-	os.Create("assets/config/users.db")
 
-	db, err := sql.Open("sqlite3", "assets/config/users.db")
-	if err != nil {
-		fmt.Println("Problem opening database file! %v", err)
-	}
+	// Write basic configuration file
+	WriteSkeletonConfig()
 
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS `users` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `username` TEXT UNIQUE, `hash` TEXT, `realname` TEXT, `email` TEXT, `permissions` INTEGER )")
-	if err != nil {
-		fmt.Println("Problem creating database! %v", err)
-	}
+	// Generate neccesary feed files
+	go GenerateRss()
 
-	text, err := GenerateRandomString(12)
-	if err != nil {
-		fmt.Println("Error randomly generating password", err)
-	}
-	fmt.Println("Admin password: ", text)
-	hash, err := bcrypt.GenerateFromPassword([]byte(text), 4)
-	if err != nil {
-		fmt.Println("Error generating hash", err)
-	}
-	if bcrypt.CompareHashAndPassword(hash, []byte(text)) == nil {
-		fmt.Println("Password hashed")
-	}
-	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,'admin','" + string(hash) + "','Administrator','admin@localhost',2)")
-	if err != nil {
-		fmt.Println("Problem creating database! %v", err)
-	}
-	defer db.Close()
+	// Create "first run" lockfile when function exits
+	defer LockFile()
+
+	// Create users SQLite3 file
+	CreateDatabase()
 
 	// Download web assets
+	GetWebAssets()
+}
+
+func GetWebAssets() {
 	fmt.Println("Downloading web assets")
 	os.MkdirAll("assets/web/", 0755)
 
@@ -115,6 +92,39 @@ func Setup() {
 	}
 }
 
+func CreateDatabase() {
+	fmt.Println("Initializing the database")
+	os.Create("assets/config/users.db")
+
+	db, err := sql.Open("sqlite3", "assets/config/users.db")
+	if err != nil {
+		fmt.Println("Problem opening database file! %v", err)
+	}
+
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS `users` ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `username` TEXT UNIQUE, `hash` TEXT, `realname` TEXT, `email` TEXT, `permissions` INTEGER )")
+	if err != nil {
+		fmt.Println("Problem creating database! %v", err)
+	}
+
+	text, err := GenerateRandomString(12)
+	if err != nil {
+		fmt.Println("Error randomly generating password", err)
+	}
+	fmt.Println("Admin password: ", text)
+	hash, err := bcrypt.GenerateFromPassword([]byte(text), 4)
+	if err != nil {
+		fmt.Println("Error generating hash", err)
+	}
+	if bcrypt.CompareHashAndPassword(hash, []byte(text)) == nil {
+		fmt.Println("Password hashed")
+	}
+	_, err = db.Exec("INSERT INTO users(id,username,hash,realname,email,permissions) VALUES (0,'admin','" + string(hash) + "','Administrator','admin@localhost',2)")
+	if err != nil {
+		fmt.Println("Problem creating database! %v", err)
+	}
+	defer db.Close()
+}
+
 func LockFile() {
 	lock, err := os.Create(".lock")
 	if err != nil {
@@ -122,6 +132,46 @@ func LockFile() {
 	}
 	lock.Write([]byte("This file left intentionally empty"))
 	defer lock.Close()
+}
+
+func WriteSkeletonConfig() {
+	fmt.Println("Writing basic config file to disk")
+
+	os.Create("assets/config/config.json")
+
+	config := Configuration{
+		"Pogo Podcast",
+		"John Doe",
+		"johndoe@localhost",
+		"A Podcast About Stuff",
+		"localhost:3000/assets/logo-large.png",
+		"http://localhost:3000",
+	}
+	c, err := json.Marshal(config)
+
+	filename := "config.json"
+
+	err = ioutil.WriteFile("./assets/config/"+filename, c, 0644)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+}
+
+func GenerateRandomBytes(n int) ([]byte, error) {
+	b := make([]byte, n)
+	_, err := rand.Read(b)
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
+}
+
+// GenerateRandomString returns a URL-safe, base64 encoded
+// securely generated random string.
+func GenerateRandomString(s int) (string, error) {
+	b, err := GenerateRandomBytes(s)
+	return base64.URLEncoding.EncodeToString(b), err
 }
 
 // From https://stackoverflow.com/questions/20357223/easy-way-to-unzip-file-with-golang
