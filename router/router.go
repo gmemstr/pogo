@@ -120,6 +120,11 @@ func Init() *mux.Router {
 		admin.ListUsers(),
 	)).Methods("GET")
 
+	r.Handle("/admin/settings", Handle(
+		auth.RequireAuthorization(2),
+		admin.ConfigurationManager(),
+	)).Methods("GET", "POST")
+
 	return r
 }
 

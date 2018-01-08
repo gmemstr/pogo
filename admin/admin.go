@@ -47,6 +47,65 @@ type Config struct {
  * able to have access to, mostly user management.
  */
 
+func ConfigurationManager() common.Handler {
+
+	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
+
+		if r.Method == "GET" {
+			return common.ReadAndServeFile("assets/config/config.json", w)
+		}
+		fmt.Println(r.Host)
+		err := r.ParseMultipartForm(32 << 20)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		file, handler, err := r.FormFile("image")
+		if err == nil {
+			defer file.Close()
+			fmt.Println(handler.Header)
+			f, err := os.OpenFile("./assets/web/static/podcastimage.png", os.O_WRONLY|os.O_CREATE, 0666)
+			if err != nil {
+				w.Write([]byte("<script>window.location = '/admin#failed';</script>"))
+
+				fmt.Println(err)
+				return nil
+			}
+			defer f.Close()
+			io.Copy(f, file)
+		} else {
+			// Do nothing, assume no image was uploaded :(
+		}
+		newconfig := Config{
+			strings.Join(r.Form["feedname"], ""),
+			strings.Join(r.Form["host"], ""),
+			strings.Join(r.Form["email"], ""),
+			strings.Join(r.Form["description"], ""),
+			r.Host + "/assets/podcastimage.png",
+			"http://" + r.Host,
+		}
+		newconfigjson, err := json.Marshal(newconfig)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		err = ioutil.WriteFile("./assets/config/config.json", newconfigjson, 0644)
+		if err != nil {
+			return &common.HTTPError{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+			}
+		}
+		w.Write([]byte("<script>window.location = '/admin#/Settings#saved';</script>"))
+		return nil
+	}
+
+}
+
 func AddUser() common.Handler {
 
 	return func(rc *common.RouterContext, w http.ResponseWriter, r *http.Request) *common.HTTPError {
