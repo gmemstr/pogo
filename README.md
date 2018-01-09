@@ -1,6 +1,8 @@
 <img src="https://cdn.rawgit.com/gmemstr/pogo/ddc9ff3a/assets/web/static/logo-sm.png" alt="Pogo logo" align="right">
 
 ## Pogo
+
+[![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo)
 	
 Podcast RSS feed generator and CMS in Go.
 
@@ -10,10 +12,6 @@ There are a couple options for getting Pogo up and running.
 
 - [Download the latest release](#running)
 - [Clone the repo and build](#building)
-
-## Status
-
-[![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo) [![gitgalaxy](https://img.shields.io/badge/website-gitgalaxy.com-blue.svg)](https://gitgalaxy.com) [![live branch](https://img.shields.io/badge/live-podcast.gitgalaxy.com-green.svg)](https://podcast.gitgalaxy.com) [![follow](https://img.shields.io/twitter/follow/gitgalaxy.svg?style=social&label=Follow)](https://twitter.com/gitgalaxy)
 
 ## Features 
 

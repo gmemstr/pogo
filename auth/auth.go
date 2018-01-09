@@ -68,7 +68,7 @@ func RequireAuthorization(permission int) common.Handler {
 		if err != nil {
 			fmt.Println(err.Error())
 			if strings.Contains(r.Header.Get("Accept"), "html") || r.Method == "GET" {
-				http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+				http.Redirect(w, r, "/#/login", http.StatusTemporaryRedirect)
 				return &common.HTTPError{
 					Message:    "Unauthorized! Redirecting to /login",
 					StatusCode: http.StatusTemporaryRedirect,
