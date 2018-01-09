@@ -144,7 +144,7 @@ func WriteSkeletonConfig() {
 		"John Doe",
 		"johndoe@localhost",
 		"A Podcast About Stuff",
-		"localhost:3000/assets/logo-large.png",
+		"localhost:3000/assets/podcastimage.png",
 		"http://localhost:3000",
 	}
 	c, err := json.Marshal(config)
