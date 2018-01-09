@@ -2,7 +2,7 @@
 
 ## Pogo
 
-[![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo)
+[![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo) [![Demo](https://img.shields.io/badge/demo-demo.pogoapp.net-green.svg)](http://demo.pogoapp.net)
 	
 Podcast RSS feed generator and CMS in Go.
 
