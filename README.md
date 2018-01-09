@@ -19,18 +19,15 @@ There are a couple options for getting Pogo up and running.
 - Frontend for listening and publishing episodes
 - Multiple user support
 - Custom CSS themes
-- Docker support
+- Simple deployment
+- SPA frontend
 
 ## Running
 
-[![asciicast](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0.png)](https://asciinema.org/a/8tU0nNmjjQPgf8UdcPnCaZcI0)
+[![asciicast](https://asciinema.org/a/2GwhVyqy8goa3h6KUaaKFSpq3.png)](https://asciinema.org/a/2GwhVyqy8goa3h6KUaaKFSpq3)
 
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
-2. Unzip somewhere safe
-3. [Edit the configuration](https://github.com/gmemstr/pogo/wiki/Configuration)
-4. Run `pogo`
-5. Navigate to your instance (`localhost:3000` by default)
-6. Login to the admin interface (your credentials are generated on the first run)
+2. Run `pogo`
 
 ## Building
 
