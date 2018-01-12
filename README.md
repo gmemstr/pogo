@@ -53,6 +53,8 @@ go build
 ./pogo
 ```
 
+[Looking for the web frontend?](https://github.com/gmemstr/pogo-vue).
+
 ## Credits
 
 Pogo depends on several other open source projects to function.
