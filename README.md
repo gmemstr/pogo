@@ -24,7 +24,7 @@ There are a couple options for getting Pogo up and running.
 
 ## Running
 
-[![asciicast](https://asciinema.org/a/2GwhVyqy8goa3h6KUaaKFSpq3.png)](https://asciinema.org/a/2GwhVyqy8goa3h6KUaaKFSpq3)
+[![asciicast](https://asciinema.org/a/GTsDD2nJeLktUAbrQq4hyziOt.png)](https://asciinema.org/a/GTsDD2nJeLktUAbrQq4hyziOt)
 
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
 2. Run `pogo`
