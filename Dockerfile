@@ -21,12 +21,7 @@ ADD . $GOPATH/src/github.com/gmemstr/pogo
 # 6. Create empty feed files
 RUN go get github.com/tools/godep && \
 	godep restore && \
-	go build -o pogoapp && chmod +x pogoapp && \
-	mkdir podcasts && \
-	touch assets/web/feed.rss assets/web/feed.json && \
-	echo '{}' >assets/web/feed.json && \
-	echo '{}' >assets/config/users.json && \
-	echo '{}' >assets/config/config.json
+	go build -o pogoapp && chmod +x pogoapp
 
 EXPOSE 3000
 
