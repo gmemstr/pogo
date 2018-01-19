@@ -3,14 +3,15 @@
 ## Pogo
 
 [![Build Status](https://travis-ci.org/gmemstr/pogo.svg?branch=master)](https://travis-ci.org/gmemstr/pogo) [![Demo](https://img.shields.io/badge/demo-demo.pogoapp.net-green.svg)](http://demo.pogoapp.net)
-	
-Podcast RSS feed generator and CMS in Go.
+
+Podcast RSS & JSON feed generator and CMS in Go.
 
 ## Getting Started
 
 There are a couple options for getting Pogo up and running.
 
 - [Download the latest release](#running)
+- [Use Docker](#docker)
 - [Clone the repo and build](#building)
 
 ## Features 
@@ -18,9 +19,9 @@ There are a couple options for getting Pogo up and running.
 - Automatic RSS and JSON feed generation
 - Frontend for listening and publishing episodes
 - Multiple user support
-- Custom CSS themes
 - Simple deployment
 - SPA frontend
+- Docker support
 
 ## Running
 
@@ -28,6 +29,18 @@ There are a couple options for getting Pogo up and running.
 
 1. [Download the latest release](https://github.com/gmemstr/pogo/releases/latest)
 2. Run `pogo`
+
+## Docker
+
+ [![dockerhub](https://img.shields.io/badge/dockerhub-gmemstr%2Fpogo-blue.svg)](https://hub.docker.com/r/gmemstr/pogo/)
+
+Docker images are based on the `master` branch and built when TravisCI is triggered.
+
+```
+docker pull gmemstr/pogo
+
+docker run -p 3000:3000 gmemstr/pogo
+```
 
 ## Building
 
