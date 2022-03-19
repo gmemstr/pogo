@@ -37,7 +37,7 @@ func Setup() {
 	WriteSkeletonConfig()
 
 	// Generate neccesary feed files
-	go GenerateRss()
+	GenerateRss()
 
 	// Create "first run" lockfile when function exits
 	// defer LockFile()
