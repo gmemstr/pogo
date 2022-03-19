@@ -40,7 +40,7 @@ func Setup() {
 	go GenerateRss()
 
 	// Create "first run" lockfile when function exits
-	defer LockFile()
+	// defer LockFile()
 
 	// Create users SQLite3 file
 	CreateDatabase()
@@ -126,7 +126,7 @@ func CreateDatabase() {
 }
 
 func LockFile() {
-	lock, err := os.Create("assets/.lock")
+	lock, err := os.Create(".lock")
 	if err != nil {
 		fmt.Println("Error: %v", err)
 	}
