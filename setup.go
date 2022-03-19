@@ -63,24 +63,24 @@ func GetWebAssets() {
 	for i := 0; i < len(res.Assets); i++ {
 		if res.Assets[i].GetName() == "webassets.zip" {
 			download := res.Assets[i]
-			fmt.Println("Release found: %v", download.GetBrowserDownloadURL())
+			fmt.Printf("Release found: %v\n", download.GetBrowserDownloadURL())
 			tmpfile, err := os.Create(download.GetName())
 			if err != nil {
-				fmt.Println("Problem creating webassets file! %v", err)
+				fmt.Printf("Problem creating webassets file! %v\n", err)
 			}
 			var j io.Reader = (*os.File)(tmpfile)
 			defer tmpfile.Close()
 
 			j, s, err := client.DownloadReleaseAsset(ctx, "gmemstr", "pogo-vue", download.GetID())
 			if err != nil {
-				fmt.Println("Problem downloading webassets! %v", err)
+				fmt.Printf("Problem downloading webassets! %v\n", err)
 			}
 			if j == nil {
 				resp, err := http.Get(s)
 				defer resp.Body.Close()
 				_, err = io.Copy(tmpfile, resp.Body)
 				if err != nil {
-					fmt.Println("Problem creating webassets file! %v", err)
+					fmt.Printf("Problem creating webassets file! %v\n", err)
 				}
 				fmt.Println("Download complete\nUnzipping")
 				err = Unzip(download.GetName(), "assets/web")

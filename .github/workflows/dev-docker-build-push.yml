@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/dev-docker-build-push.yml'
     branches-ignore:
       - 'master'
 
