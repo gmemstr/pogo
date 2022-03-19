@@ -126,7 +126,7 @@ func CreateDatabase() {
 }
 
 func LockFile() {
-	lock, err := os.Create(".lock")
+	lock, err := os.Create("./assets/.lock")
 	if err != nil {
 		fmt.Println("Error: %v", err)
 	}
