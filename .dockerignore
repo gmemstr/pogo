@@ -22,3 +22,7 @@ feed\.rss
 .travis\.yml
 
 _config\.yml
+
+Dockerfile
+
+assets/

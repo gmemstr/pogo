@@ -1,8 +1,1 @@
-{
-	"Name": "Pogo Test Feed",
-	"Host": "Gabriel Simmer",
-	"Email": "admin@localhost",
-	"Description": "Discussion about open source projects on the internet.",
-	"Image": "localhost:3000/assets/logo-xs.png",
-	"PodcastUrl": "http://localhost:3000"
-}
+{"Name":"Pogo Podcast","Host":"John Doe","Email":"johndoe@localhost","Description":"A Podcast About Stuff","Image":"localhost:3000/assets/podcastimage.png","PodcastUrl":"http://localhost:3000"}
