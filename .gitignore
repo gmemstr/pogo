@@ -26,3 +26,5 @@ assets/config/users\.db
 run\.lockfile
 
 \.lock
+
+assets/

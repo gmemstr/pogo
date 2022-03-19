@@ -1,28 +1,21 @@
-# Use latest golang image
-FROM golang:latest
+FROM golang:stretch as builder
 
-RUN  mkdir -p /go/src \
-  && mkdir -p /go/bin \
-  && mkdir -p /go/pkg
-ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:$PATH
+WORKDIR /build/pogo
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Set working directory
-WORKDIR $GOPATH/src/github.com/gmemstr/pogo
+COPY . .
 
-# Add source to container so we can build
-ADD . $GOPATH/src/github.com/gmemstr/pogo
+RUN GOOS=linux go build -ldflags "-s -w"
 
-# 1. Install make and dependencies
-# 2. Install Go dependencies
-# 3. Build named Linux binary and allow execution
-# 4. List directory structure (for debugging really)\
-# 5. Make empty podcast direcory
-# 6. Create empty feed files
-RUN go get github.com/tools/godep && \
-	godep restore && \
-	go build -o pogoapp && chmod +x pogoapp
 
+FROM debian:stretch-slim
+
+RUN apt update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
 EXPOSE 3000
 
-CMD ./pogoapp
+COPY --from=builder /build/pogo/pogo pogo
+
+ENTRYPOINT ["/app/pogo"]
